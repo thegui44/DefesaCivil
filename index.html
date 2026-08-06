@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Defesa Civil - Floraí/PR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="@image/favicon.svg">
+</head>
+
+<body>
+
+    <div class="background-overlay">
+        <img src="@image/wallpaper.jpg" alt="Fundo">
+    </div>
+
+    <div class="theme-overlay"></div>
+
+    <div class="container">
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="@image/florai.png" alt="Brazão de Floraí" class="logo-img">
+                    <img src="@image/favicon.svg" alt="Logo Defesa Civil" class="logo-img" id="logo-theme">
+                    <span class="logo-text">Defesa Civil de Floraí/PR</span>
+                </div>
+
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="openModal('modal-alertas')">Previsão</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="openModal('modal-abrigos')">Abrigos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="openModal('modal-equipe')">Equipe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="openModal('modal-contato')">Contato</a>
+                    </li>
+                    <li class="nav-item theme-desktop-item">
+                        <button class="nav-link theme-btn" id="theme-toggle-desktop" aria-label="Alternar tema">
+                            <img src="@image/lua.svg" alt="Tema" class="theme-icon-img" id="theme-icon-desktop">
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="nav-controls">
+                    <button class="theme-mobile-btn" id="theme-toggle-mobile" aria-label="Alternar tema">
+                        <img src="@image/lua.svg" alt="Tema" class="theme-icon-img" id="theme-icon-mobile">
+                    </button>
+                    <button class="hamburger" id="hamburger-btn">
+                        <img src="@image/menu.svg" alt="Menu" class="icon" width="20" height="20">
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="search-hero">
+            <div class="search-container">
+                <h1 class="hero-title">Proteção e Defesa Civil - <span>Floraí/PR</span></h1>
+                <p class="hero-sub">Informações atualizadas sobre clima, alertas e segurança</p>
+
+                <!-- DASHBOARD GRID -->
+                <div class="dashboard-grid">
+
+                    <!-- CLIMA ATUAL -->
+                    <div class="dashboard-card">
+                        <div class="card-title">
+                            <i class="fas fa-cloud-sun"></i> Clima Atual - <span id="weather-city">Carregando...</span>
+                        </div>
+                        <div class="weather-info">
+                            <div class="weather-icon-big" id="weather-icon">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+
+                            <div>
+                                <div class="weather-temp" id="weather-temp">--° <small>C</small></div>
+                            </div>
+
+                            <div>
+                                <div class="weather-details">
+                                    <span><i class="fas fa-tint" style="color: rgb(0, 153, 255);"></i> Umidade: <span id="weather-humidity">--%</span></span>
+                                    <span><i class="fas fa-wind" style="color: rgb(27, 126, 29);"></i> Vento: <span id="weather-wind">-- km/h</span></span>
+                                    <span><i class="fas fa-thermometer-half" style="color: rgb(255, 106, 0);"></i> Sensação: <span id="weather-feels">--°C</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top:12px;font-size:0.8rem;color:var(--text-secondary);">
+                            <i class="fas fa-sync-alt"></i> Atualizado: <span id="weather-updated">--/--/---- --:--</span>
+                        </div>
+                    </div>
+
+
+                    <!-- ALERTAS -->
+                    <div id="alert-card" class="dashboard-card alert-normal">
+                        <div class="card-title">
+                            <i class="fas fa-exclamation-triangle"></i> Avisos e Alertas Climáticos
+                        </div>
+                        <div class="alert-content-box">
+                            <div id="alert-icon-box" class="alert-icon-normal" style="display:none;">
+                                <!-- Ícone removido - agora exibido apenas no título -->
+                            </div>
+                            <div>
+                                <div id="alert-headline" class="alert-title-text">Condições Normais</div>
+                                <div id="alert-description" class="alert-desc-text">
+                                    Não há avisos emergenciais para Floraí/PR neste momento. Aproveite para se prevenir com nossas orientações no <a href="https://www.instagram.com/defesacivilflorai"> @defesacivilflorai</a>
+                                </div>
+                                <!-- Período de vigência caso exista um alerta -->
+                                <div id="alert-period" class="alert-time-text" style="display:none;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ATALHOS -->
+                    <div class="dashboard-card full">
+                        <div class="card-title"><i class="fas fa-link"></i> Links de acesso a informações oficiais</div>
+                        <div class="instagram-grid">
+
+                                <a href="https://www.simepar.br/simepar/forecast_by_counties/4107801" target="_blank" rel="noopener noreferrer" class="theme-link-btn">Avisos do SIMEPAR</a>
+                            
+                                <a href="https://portal.inmet.gov.br/" target="_blank" rel="noopener noreferrer" class="theme-link-btn">Avisos do INMET</a>
+                        
+                                <a href="PCDC_Florai_2026.pdf" target="_blank" rel="noopener noreferrer" class="theme-link-btn">Plano de Contingência</a>
+                                
+                                <a href="https://www.instagram.com/defesacivilflorai/" target="_blank" rel="noopener noreferrer" class="theme-link-btn">Nosso Instagram</a>
+  
+                        </div>
+                    </div>
+
+                    <!-- MAPA -->
+                    <div class="dashboard-card full">
+                        <div class="card-title"><i class="fas fa-map-marked-alt"></i> Mapa de Atendimentos e Abrigos</div>
+                        <div class="map-wrapper">
+                            <iframe src="https://www.google.com/maps/d/embed?mid=1QePHcw0cHKCdaEF1GNpDlZ3kb4R15qs&ehbc=2E312F&noprof=1" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <div style="margin-top:8px;font-size:0.75rem;color:var(--text-secondary);text-align:center;">
+                            <i class="fas fa-location-dot" style="color:var(--dc-orange);"></i>
+                            Abrigos: 4 | Postos de Atendimento: 2 | Pontos de Apoio: 2
+                        </div>
+                    </div>
+
+                    <!-- INSTAGRAM CARROSSEL -->
+                    <div class="dashboard-card full">
+                        <div class="card-title"><i class="fab fa-instagram"></i> Postagens de Orientação</div>
+                        <div class="instagram-grid" id="instagramGrid">
+                            <!-- Preenchido via JS -->
+                            <div class="insta-item">
+                                <i class="fas fa-image"></i>
+                                <div class="insta-overlay">@defesacivilflorai</div>
+                            </div>
+                            <div class="insta-item">
+                                <i class="fas fa-image"></i>
+                                <div class="insta-overlay">@defesacivilflorai</div>
+                            </div>
+                            <div class="insta-item">
+                                <i class="fas fa-image"></i>
+                                <div class="insta-overlay">@defesacivilflorai</div>
+                            </div>
+                            <div class="insta-item">
+                                <i class="fas fa-image"></i>
+                                <div class="insta-overlay">@defesacivilflorai</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ÁREA TÉCNICA -->
+                    <div class="dashboard-card full">
+                        <div class="card-title"><i class="fas fa-book"></i> Acesso a Capacitação para Equipes (Gov.BR)</div>
+                        <div class="instagram-grid">
+
+                                <a href="https://www.escolavirtual.gov.br/curso/885" target="_blank" rel="noopener noreferrer" class="theme-link-btn">Alertas Públicos (Idap)</a>
+                            
+                                <a href="https://www.escolavirtual.gov.br/curso/785" target="_blank" rel="noopener noreferrer" class="theme-link-btn">Plano de Contingência</a>
+                        
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <span class="rodape">© 2026 | Desenvolvido por <a href="https://ghenrique.com.br" target="_blank" rel="noopener noreferrer">Guilherme Henrique</a> | Uso livre nos termos da <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">GNU GPLv3</a> | Código-fonte em: <a href="https://github.com/thegui44/defesacivil.git" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </span>
+        </div>
+    </div>
+
+    <!-- ============================================
+    MODAIS
+    ============================================ -->
+
+    <!-- MODAL ALERTAS -->
+    <div class="modal" id="modal-alertas">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal-alertas')">
+                <img src="@image/close.svg" alt="Fechar" width="24" height="24">
+            </button>
+            <h2 class="modal-title">🖥️ Painel do Clima</h2>
+            <p class="modal-desc">Painel climático atual e previsão para os próximos dias</p>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;">
+                    
+                    <div>
+                        <main>
+                            <!-- Os alertas serão exibidos aqui -->
+                            <div id="painel-alertas" class="painel-container">
+                                <p class="carregando">Buscando alertas meteorológicos oficiais...</p>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ABRIGOS -->
+    <div class="modal" id="modal-abrigos">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal-abrigos')">
+                <img src="@image/close.svg" alt="Fechar" width="24" height="24">
+            </button>
+            <h2 class="modal-title">🏠 Abrigos e Pontos de Apoio</h2>
+            <p class="modal-desc">Locais seguros para acolhimento em situações de emergência</p>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
+                    <i class="fas fa-school" style="color:var(--dc-orange);font-size:1.5rem;"></i>
+                    <div>
+                        <strong>CAP Padre Ângelo Rabachin</strong>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);">Rua Tiradentes, 363 - Capacidade: 60 pessoas</div>
+                    </div>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
+                    <i class="fas fa-school" style="color:var(--dc-orange);font-size:1.5rem;"></i>
+                    <div>
+                        <strong>CMEI Menino Jesus</strong>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);">Rua Getulio Vargas, 1096 - Capacidade: 80 pessoas</div>
+                    </div>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
+                    <i class="fas fa-school" style="color:var(--dc-orange);font-size:1.5rem;"></i>
+                    <div>
+                        <strong>CMEI Wanda Maria de Lucca</strong>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);">Rua Alziro Marassi, 330 - Capacidade: 115 pessoas</div>
+                    </div>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
+                    <i class="fas fa-school" style="color:var(--dc-orange);font-size:1.5rem;"></i>
+                    <div>
+                        <strong>EMEF Elena Maria Pedroni</strong>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);">Rua Augusto Ventura, 285 - Capacidade: 120 pessoas</div>
+                    </div>
+                </div>
+
+            </div>
+            <div style="margin-top:16px;padding:12px;background:rgba(250,169,84,0.1);border-radius:8px;text-align:center;font-size:0.85rem;color:var(--text-secondary);">
+                <i class="fas fa-phone" style="color:var(--dc-orange);"></i> Para emergências, ligue: 199
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EQUIPE -->
+    <div class="modal" id="modal-equipe">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal-equipe')">
+                <img src="@image/close.svg" alt="Fechar" width="24" height="24">
+            </button>
+            <h2 class="modal-title">👨‍🚒 Nossa Equipe</h2>
+            <p class="modal-desc">Profissionais dedicados à segurança da comunidade</p>
+            <div class="team-grid" style="grid-template-columns:repeat(auto-fill,minmax(140px,1fr));">
+                <div class="team-member">
+                    <div class="team-avatar"><i class="fas fa-user-tie"></i></div>
+                    <h4>José Antonio</h4>
+                    <p>Coordenador</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-avatar"><i class="fas fa-user-tie"></i></div>
+                    <h4>Andrei Barbosa</h4>
+                    <p>Secretário</p>
+                </div>
+                <div class="team-member">
+                    <img class="team-avatar" src="@image/guilherme.jpg" alt="Foto do Perfil">
+                    <h4>Guilherme Henrique</h4>
+                    <p>Diretor Operacional</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONTATO -->
+    <div class="modal" id="modal-contato">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal-contato')">
+                <img src="@image/close.svg" alt="Fechar" width="24" height="24">
+            </button>
+            <h2 class="modal-title">📞 Contato</h2>
+            <p class="modal-desc">Entre em contato com a Defesa Civil</p>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
+                    <i class="fas fa-phone" style="color:var(--dc-orange);font-size:1.3rem;"></i>
+                    <div>
+                        <strong>Emergência</strong>
+                        <div style="color:var(--text-secondary);">199</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
+                    <i class="fas fa-phone-alt" style="color:var(--dc-orange);font-size:1.3rem;"></i>
+                    <div>
+                        <strong>Telefone</strong>
+                        <div style="color:var(--text-secondary);">(44) 3242-8300</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
+                    <i class="fas fa-envelope" style="color:var(--dc-orange);font-size:1.3rem;"></i>
+                    <div>
+                        <strong>E-mail</strong>
+                        <div style="color:var(--text-secondary);">defesacivil@florai.pr.gov.br</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
+                    <i class="fas fa-map-marker-alt" style="color:var(--dc-orange);font-size:1.3rem;"></i>
+                    <div>
+                        <strong>Endereço</strong>
+                        <div style="color:var(--text-secondary);">Rua Getulio Vargas, 177 - Centro - Floraí/PR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX / VISUALIZADOR DE IMAGENS -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <button class="lightbox-close" onclick="closeLightbox()">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="lightbox-nav prev" onclick="changeLightboxImage(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="lightbox-nav next" onclick="changeLightboxImage(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <img class="lightbox-image" id="lightboxImage" src="" alt="">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+            <div class="lightbox-counter" id="lightboxCounter"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
