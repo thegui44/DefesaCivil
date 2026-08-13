@@ -1,6 +1,11 @@
-        /* ============================================
-           CSS COMPLETO - DEFESA CIVIL
-           ============================================ */
+/* ============================================
+   FONTE LOCAL - COMFORTAA
+   ============================================ */
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('comfortaa.woff2') format('woff2');
+}
 
         /* RESET & BASE */
         * {
@@ -12,7 +17,6 @@
         :root {
             /* Cores Defesa Civil */
             --dc-white: #FEFEFE;
-            --dc-purple: #585570;
             --dc-orange: #FAA954;
 
             /* Status de Alerta */
@@ -24,7 +28,6 @@
             --primary: #585570;
             --primary-dark: #3D3A4F;
             --secondary: #FAA954;
-            --accent: #FAA954;
 
             --bg-glass: rgba(254, 254, 254, 0.92);
             --bg-card: rgba(255, 255, 255, 0.9);
@@ -43,16 +46,12 @@
             --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
 
             --success: #00B050;
-            --status-offline: #DC2626;
-            --status-buffering: #FFC000;
 
             --overlay-color: rgba(88, 85, 112, 0.15);
 
             --icon-filter: none;
             --volume-icon-filter: none;
             --volume-icon-filter-play: brightness(0) invert(1);
-
-            --gradient-primary: linear-gradient(135deg, #FAA954 0%, #585570 100%);
 
             --bg-gradient-start: #f5f0eb;
             --bg-gradient-end: #e8e0d8;
@@ -151,15 +150,8 @@
             background: var(--overlay);
         }
 
-        @font-face {
-            font-family: 'Comfortaa';
-            src: url('comfortaa.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
         body {
-            font-family: 'Comfortaa', sans-serif;
+            font-family: 'Comfortaa', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             margin: 0;
             padding: 0;
@@ -212,6 +204,65 @@
             position: relative;
         }
 
+        .centralizar-update {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top:12px;
+            font-size:0.8rem;
+            color:var(--text-secondary);
+            padding-top: 1rem;
+        }
+
+        .centralizar-info {
+            display: inline-flex;
+            align-items: center;
+            justify-content: left;
+            gap: 8px;
+            margin-left:12px;
+            font-size:0.8rem;
+            color:var(--text-secondary);
+        }
+
+        /* Padronização para ícones SVG JS */
+        .weather-emoji,
+        .modal-icon,
+        .nav-icon,
+        .alert-icon {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+            flex-shrink: 0;
+        }
+
+        /* Tamanhos específicos */
+        .weather-emoji {
+            width: 64px;
+            height: 64px;
+        }
+
+        .modal-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .alert-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .icone {
+            width: 20px;
+            height: 20px;
+        }
+
+        .icone-peq {
+            width: 16px;
+            height: 16px;
+        }
+
         .logo {
             display: flex;
             align-items: center;
@@ -222,11 +273,6 @@
         .logo-img {
             width: 45px;
             height: 45px;
-            transition: transform 0.3s ease;
-        }
-
-        .logo-img:hover {
-            transform: scale(1.02);
         }
 
         .logo-text {
@@ -236,27 +282,6 @@
         }
         .logo-text span {
             color: var(--dc-orange);
-        }
-
-        .theme-link-btn {
-            text-align: center;
-            display: block;
-            align-items: center;
-            padding: 8px 14px;
-            text-decoration: none;
-            color: var(--text-primary);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
-        }
-
-        .theme-link-btn:hover {
-            background: var(--hover-bg);
-            color: var(--hover-text);
         }
 
         .nav-menu {
@@ -354,6 +379,36 @@
         }
 
         /* HERO / CONTEÚDO PRINCIPAL */
+
+        /* IMAGEM DO HERO - DESKTOP APENAS */
+
+        .hero-image-desktop {
+            display: block;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .hero-image-desktop .hero-icon {
+            width: 140px;
+            height: 140px;
+            transition: transform 0.3s ease;
+        }
+
+        /* RESPONSIVIDADE - OCULTAR NO MOBILE  */
+
+        @media (max-width: 768px) {
+            .hero-image-desktop {
+                display: none !important;
+            }
+        }
+
+        /* Ajuste para telas muito pequenas */
+        @media (max-width: 480px) {
+            .hero-image-desktop {
+                display: none !important;
+            }
+        }
+
         .search-hero {
             flex: 1;
             flex-direction: column;
@@ -395,7 +450,7 @@
         /* GRID DE CARDS */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 1fr;
             gap: 24px;
             margin-top: 20px;
         }
@@ -428,9 +483,6 @@
             align-items: center;
             gap: 8px;
         }
-        .card-title i {
-            color: var(--dc-orange);
-        }
 
         /* CLIMA */
         .weather-info {
@@ -460,7 +512,8 @@
             color: var(--text-secondary);
         }
         .weather-icon-big {
-            font-size: 3rem;
+            font-size: 4rem;
+            line-height: 1;
             color: var(--dc-orange);
         }
 
@@ -487,15 +540,11 @@
             margin-top: 10px;
         }
 
-        /* Ícones de Alerta */
-        .alert-icon-normal { font-size: 2.2rem; color: #2ecc71; }
-        .alert-icon-warning { font-size: 2.2rem; color: #f1c40f; }
-        .alert-icon-danger { font-size: 2.2rem; color: #e74c3c; }
-
         /* Textos descritivos */
         .alert-title-text {
             font-size: 1.1rem;
             font-weight: bold;
+            text-align: center;
             color: var(--text-primary);
         }
 
@@ -525,9 +574,41 @@
             100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
         }
 
+        /* LINKS GRID */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
 
-        /* PAINEL INMET */
+        .theme-link-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
 
+        .theme-link-btn:hover {
+            background: var(--hover-bg);
+            color: var(--hover-text);
+            border-color: var(--dc-orange);
+            transform: translateY(-2px);
+        }
+
+        .theme-link-btn img {
+            flex-shrink: 0;
+        }
+
+        /* PAINEL PREVISÃO */
         .painel-container {
             max-width: 600px;
             margin: 0 auto;
@@ -541,11 +622,15 @@
             color: #fff;
         }
 
-        /* Cores oficiais baseadas na severidade do INMET */
-        .severidade-verde { background-color: #2ecc71; color: #fff; } /* Sem Alerta */
-        .severidade-moderate { background-color: #f39c12; }          /* Perigo Potencial */
-        .severidade-severe { background-color: #e67e22; }            /* Perigo */
-        .severidade-extreme { background-color: #c0392b; }           /* Grande Perigo */
+        .alerta-card h4, p {
+            color: #fff !important;
+        }
+
+        /* Cores oficiais baseadas na severidade */
+        .severidade-verde { background-color: #2ecc71; color: #fff; }
+        .severidade-moderate { background-color: #f39c12; }
+        .severidade-severe { background-color: #e67e22; }
+        .severidade-extreme { background-color: #c0392b; }
 
         .alerta-card h3 {
             margin-top: 0;
@@ -560,11 +645,10 @@
         .carregando, .sem-alerta {
             text-align: center;
             padding: 20px;
-            background: #fff;
+            background: var(--card-bg);
             border-radius: 8px;
-            color: #555;
+            color: var(--text-secondary);
         }
-
 
         /* MAPA */
         .map-wrapper {
@@ -774,7 +858,7 @@
             transform: translateY(-4px);
             border-color: var(--dc-orange);
         }
-        .team-avatar img {
+        .team-avatar {
             width: 70px;
             height: 70px;
             border-radius: 50%;
@@ -785,26 +869,20 @@
             justify-content: center;
             font-size: 2rem;
             color: white;
+            overflow: hidden;
         }
-            .team-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: var(--dc-orange);
-            margin: 0 auto 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
+        .team-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .team-member h4 {
             font-size: 0.9rem;
-            color: var(--text-primary);
+            color: var(--text-primary) !important;
         }
         .team-member p {
             font-size: 0.75rem;
-            color: var(--text-secondary);
+            color: var(--text-secondary) !important;
         }
 
         /* RODAPÉ */
@@ -818,10 +896,11 @@
             font-size: 12px;
             color: var(--text-secondary);
             margin-bottom: -20px;
+            flex-wrap: wrap;
         }
         .rodape a {
             color: var(--text-secondary);
-            font-weight: bold;
+            font-weight: bold !important;
             text-decoration: none !important;
         }
 
@@ -843,6 +922,9 @@
             }
             .instagram-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .links-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
 
@@ -922,6 +1004,9 @@
             }
             .team-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .links-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1036,6 +1121,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.5rem;
         }
 
         .modal-close:hover {
@@ -1055,7 +1141,7 @@
         }
 
         .modal-desc {
-            color: var(--text-secondary);
+            color: var(--text-secondary) !important;
             font-size: 0.95rem;
             margin-bottom: 24px;
         }
@@ -1071,3 +1157,182 @@
             background: var(--dc-orange);
             border-radius: 3px;
         }
+
+        /* ============================================
+   ÍCONES SVG - PADRONIZAÇÃO
+   ============================================ */
+
+/* Classe base para todos os ícones SVG */
+.icon-svg {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Tamanhos padrão */
+.icon-sm { width: 16px; height: 16px; }
+.icon-md { width: 20px; height: 20px; }
+.icon-lg { width: 24px; height: 24px; }
+.icon-xl { width: 32px; height: 32px; }
+.icon-xxl { width: 48px; height: 48px; }
+
+/* Ícones do clima */
+.weather-emoji {
+    width: 64px;
+    height: 64px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Ícones de alerta */
+.alert-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Ícones dos modais */
+.modal-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Ícones pequenos */
+.icone {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.icone-peq {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Avatar da equipe */
+.team-avatar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: block;
+}
+
+/* Ícones do lightbox (brancos) */
+.lightbox-icon {
+    width: 32px;
+    height: 32px;
+    filter: brightness(0) invert(1);
+}
+
+/* Ícones do lightbox - fechar */
+.lightbox-close-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+}
+
+/* Ajuste para tema escuro - ícones que devem ser brancos */
+[data-theme="dark"] .lightbox-icon,
+[data-theme="dark"] .lightbox-close-icon {
+    filter: brightness(0) invert(1);
+}
+
+/* Ícones de navegação */
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Ajuste para botões com ícones */
+.theme-link-btn img {
+    flex-shrink: 0;
+}
+
+/* Animação para ícones de loading */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.icone-loading {
+    animation: spin 1s linear infinite;
+}
+
+/* ============================================
+   ÍCONES DO MENU HAMBURGUER - TEMA ESCURO
+   ============================================ */
+
+/* Apenas os ícones do botão hamburguer ficam brancos no tema escuro */
+[data-theme="dark"] .hamburger img {
+    filter: brightness(0) invert(1);
+}
+
+/* Apenas os ícones de fechar dos modais ficam brancos no tema escuro */
+[data-theme="dark"] .modal-close img {
+    filter: brightness(0) invert(1);
+}
+
+/* ============================================
+   ALERTAS - CORREÇÃO PARA MODO ESCURO
+   ============================================ */
+
+/* Garantir que os textos do alerta fiquem legíveis no modo escuro */
+.alert-desc-text,
+.alert-title-text,
+.alert-time-text {
+    color: var(--text-primary);
+}
+
+/* Período do alerta */
+#alert-period {
+    color: var(--text-secondary);
+}
+
+/* Link dentro da descrição do alerta */
+.alert-desc-text a {
+    color: var(--dc-orange);
+    text-decoration: underline;
+}
+
+.alert-desc-text a:hover {
+    color: var(--hover-text);
+}
+
+/* Ajuste específico para o modo escuro */
+[data-theme="dark"] .alert-desc-text,
+[data-theme="dark"] .alert-title-text,
+[data-theme="dark"] .alert-time-text,
+[data-theme="dark"] #alert-period {
+    color: #e0dcd8; /* Branco suave para contraste */
+}
+
+[data-theme="dark"] .alert-desc-text a {
+    color: #faa954; /* Laranja da defesa civil */
+}
+
+/* Card de alerta - fundo mais escuro no modo escuro para contraste */
+[data-theme="dark"] .dashboard-card.alert-normal {
+    background: rgba(45, 42, 55, 0.95);
+}
+
+[data-theme="dark"] .dashboard-card.alert-warning {
+    background: rgba(241, 196, 15, 0.15);
+}
+
+[data-theme="dark"] .dashboard-card.alert-danger {
+    background: rgba(231, 76, 60, 0.15);
+}
