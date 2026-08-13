@@ -443,7 +443,7 @@
         }
         .hero-sub {
             font-size: 1rem;
-            color: var(--text-secondary);
+            color: var(--text-secondary) !important;
             margin-bottom: 30px;
         }
 
