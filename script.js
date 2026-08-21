@@ -43,6 +43,11 @@ function closeModal(modalId) {
     if (modal) {
         modal.classList.remove('active');
         document.body.style.overflow = '';
+        
+        // Se for o modal de abrigos, fecha todos os cards
+        if (modalId === 'modal-abrigos') {
+            fecharTodosAbrigos();
+        }
     }
 }
 
@@ -51,6 +56,8 @@ function closeAllModals() {
         modal.classList.remove('active');
     });
     document.body.style.overflow = '';
+    // Também fecha os abrigos se estiverem abertos
+    fecharTodosAbrigos();
 }
 
 // Fechar modal ao clicar fora do conteúdo (backdrop)
@@ -58,6 +65,11 @@ document.addEventListener('click', (e) => {
     if (e.target.classList.contains('modal')) {
         e.target.classList.remove('active');
         document.body.style.overflow = '';
+        
+        // Se for o modal de abrigos, fecha todos os cards
+        if (e.target.id === 'modal-abrigos') {
+            fecharTodosAbrigos();
+        }
     }
 });
 
@@ -261,6 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderTeam();
     renderInstagram();
     setupMobileNavigation();
+    renderAbrigos();
 
     console.log('Iniciando busca de dados climáticos (Open-Meteo)...');
     fetchWeatherAndAlerts();
@@ -348,10 +361,14 @@ async function fetchWeatherAndAlerts() {
     const weatherIcon = document.getElementById('weather-icon');
     const weatherTemp = document.getElementById('weather-temp');
     const weatherCity = document.getElementById('weather-city');
+    const weatherMin = document.getElementById('weather-min');
+    const weatherMax = document.getElementById('weather-max');
     
     if (weatherIcon) weatherIcon.innerHTML = `<img src="@image/icones/tempo.svg" alt="Carregando" class="weather-emoji">`;
     if (weatherTemp) weatherTemp.innerHTML = `<img src="@image/icones/update.svg" alt="Carregando" class="icone">`;
     if (weatherCity) weatherCity.innerText = "Carregando...";
+    if (weatherMin) weatherMin.innerText = "--";
+    if (weatherMax) weatherMax.innerText = "--";
     
     try {
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,showers,snowfall,weather_code,wind_speed_10m,wind_gusts_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max&timezone=${TIMEZONE}&forecast_days=3`;
@@ -399,7 +416,15 @@ function processarDadosClima(data) {
     const weatherCode = current.weather_code || 0;
     const weatherInfo = getWeatherInfo(weatherCode);
     
-    console.log('Clima atual:', { temperature, weatherInfo, windSpeed, humidity, precipitation });
+    // Temperaturas mínima e máxima do dia (índice 0 = hoje)
+    const tempMin = daily.temperature_2m_min && daily.temperature_2m_min[0] !== undefined 
+        ? Math.round(daily.temperature_2m_min[0]) 
+        : null;
+    const tempMax = daily.temperature_2m_max && daily.temperature_2m_max[0] !== undefined 
+        ? Math.round(daily.temperature_2m_max[0]) 
+        : null;
+    
+    console.log('Clima atual:', { temperature, weatherInfo, windSpeed, humidity, precipitation, tempMin, tempMax });
 
     const cityEl = document.getElementById('weather-city');
     const tempEl = document.getElementById('weather-temp');
@@ -408,6 +433,8 @@ function processarDadosClima(data) {
     const feelsEl = document.getElementById('weather-feels');
     const iconEl = document.getElementById('weather-icon');
     const updatedEl = document.getElementById('weather-updated');
+    const minEl = document.getElementById('weather-min');
+    const maxEl = document.getElementById('weather-max');
     
     if (cityEl) cityEl.innerText = "Floraí/PR";
     if (tempEl) tempEl.innerHTML = `${temperature} <small>°C</small>`;
@@ -418,6 +445,8 @@ function processarDadosClima(data) {
             `${windSpeed} km/h`;
     }
     if (feelsEl) feelsEl.innerText = `${feelsLike}°C`;
+    if (minEl) minEl.innerText = tempMin !== null ? tempMin : '--';
+    if (maxEl) maxEl.innerText = tempMax !== null ? tempMax : '--';
 
     if (iconEl) {
         const svgPath = getWeatherSVG(weatherInfo.emoji);
@@ -580,12 +609,16 @@ function mostrarErro(mensagem) {
     const windEl = document.getElementById('weather-wind');
     const feelsEl = document.getElementById('weather-feels');
     const updatedEl = document.getElementById('weather-updated');
+    const minEl = document.getElementById('weather-min');
+    const maxEl = document.getElementById('weather-max');
     
     if (cityEl) cityEl.innerText = "Floraí/PR";
     if (tempEl) tempEl.innerHTML = `-- <small>°C</small>`;
     if (humidityEl) humidityEl.innerText = '--%';
     if (windEl) windEl.innerText = '-- km/h';
     if (feelsEl) feelsEl.innerText = '--°C';
+    if (minEl) minEl.innerText = '--';
+    if (maxEl) maxEl.innerText = '--';
     if (iconEl) {
         iconEl.innerHTML = `<img src="@image/icones/nuvem.svg" alt="Indisponível" class="weather-emoji">`;
     }
@@ -730,15 +763,181 @@ function atualizarModalAlertas(current, daily, alerts) {
     }
 
     html += `
-        <div style="padding:12px;background:rgba(250,169,84,0.1);border-radius:8px;text-align:center;font-size:0.85rem;color:var(--text-secondary);">
-            <img src="@image/icones/telefone.svg" alt="Telefone" style="width:16px;height:16px;vertical-align:middle;"> 
-            Emergência: <strong>199</strong> | Defesa Civil: (44) 3242-8300
-            <br>
+        <div style="text-align:center;font-size:0.85rem;color:var(--text-primary);">
             <small style="opacity:0.7;">Dados fornecidos por Open-Meteo</small>
         </div>
     `;
 
     painel.innerHTML = html;
+}
+
+// ============================================
+// VARIÁVEL PARA CONTROLAR CARD EXPANDIDO
+// ============================================
+
+let abrigoExpandido = null;
+
+// ============================================
+// FUNÇÃO: RENDER ABRIGOS COM STREET VIEW
+// ============================================
+
+function renderAbrigos() {
+    const container = document.getElementById('abrigos-container');
+    if (!container) return;
+
+    const abrigos = [
+        {
+            nome: 'CAP Padre Ângelo Rabachin',
+            endereco: 'Rua Tiradentes, 363',
+            capacidade: '60 pessoas',
+            telefone: '(44) 3242-8333',
+            observacoes: 'Abrigo Centro',
+            responsavel: 'Regina de Deus Pereira',
+            iframe: 'https://www.google.com/maps/embed?pb=!4v1787332442853!6m8!1m7!1scXUHw8p1bIYC_9bMz3LCNQ!2m2!1d-23.32180426952802!2d-52.29984154565143!3f121.18814108212221!4f-10.23276185206575!5f0.7820865974627469'
+        },
+        {
+            nome: 'CMEI Menino Jesus',
+            endereco: 'Rua Getulio Vargas, 1096',
+            capacidade: '80 pessoas',
+            telefone: '(44) 3242-8332',
+            observacoes: 'Abrigo Norte',
+            responsavel: 'Tatiana Belmonte Botaro Sanches',
+            iframe: 'https://www.google.com/maps/embed?pb=!4v1787332366276!6m8!1m7!1sgVQ19ZQLwLhu9kPrMy5hHg!2m2!1d-23.31469846255471!2d-52.3079123816997!3f62.70644656144767!4f-3.879254324931523!5f0.7820865974627469'
+        },
+        {
+            nome: 'CMEI Wanda Maria de Lucca',
+            endereco: 'Rua Alziro Marassi, 330',
+            capacidade: '115 pessoas',
+            telefone: '(44) 3242-8330',
+            observacoes: 'Abrigo Oeste',
+            responsavel: 'Leila Daiane Conti',
+            iframe: 'https://www.google.com/maps/embed?pb=!4v1787316383001!6m8!1m7!1sNTa4qKPepLvDlJlr-si3mg!2m2!1d-23.31827745080287!2d-52.3100478883638!3f25.132445863730958!4f5.1964079142260715!5f1.5353860272957096'
+        },
+        {
+            nome: 'EMEF Elena Maria Pedroni',
+            endereco: 'Rua Augusto Ventura, 285',
+            capacidade: '120 pessoas',
+            telefone: '(44) 3242-8331',
+            observacoes: 'Abrigo Leste',
+            responsavel: 'Rosilene Aparecida Ariozi Viotto',
+            iframe: 'https://www.google.com/maps/embed?pb=!4v1787332211201!6m8!1m7!1saDFWMmaNK1VpjyuGDijrYA!2m2!1d-23.32329608991772!2d-52.29632157461903!3f208.5261160452246!4f-0.11605143845567056!5f0.7820865974627469'
+        }
+    ];
+
+    container.innerHTML = abrigos.map((abrigo, index) => {
+        // Extrair coordenadas do iframe para o link "Como chegar"
+        const coordsMatch = abrigo.iframe.match(/!2m2!1d([^!]+)!2d([^!]+)/);
+        const lat = coordsMatch ? coordsMatch[1] : '';
+        const lng = coordsMatch ? coordsMatch[2] : '';
+        
+        return `
+            <div class="abrigo-card" id="abrigo-card-${index}">
+                <div class="abrigo-card-header" onclick="toggleAbrigoCard(${index})">
+                    <img src="@image/icones/escola.svg" alt="Abrigo" class="icone">
+                    <div style="flex:1;">
+                        <strong style="color:var(--text-primary);">${abrigo.nome}</strong>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);">${abrigo.endereco}</div>
+                    </div>
+                    <span class="toggle-icon" id="toggle-icon-${index}">
+                        <img src="@image/icones/seta-baixo.svg" alt="Expandir" class="icone">
+                    </span>
+                </div>
+                <div class="abrigo-card-body" id="abrigo-body-${index}">
+                    <div class="street-view">
+                        <iframe 
+                            src="${abrigo.iframe}" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="strict-origin-when-cross-origin">
+                        </iframe>
+                    </div>
+                    <div class="info-row">
+                        <img src="@image/icones/pessoas.svg" alt="Capacidade" class="icone-peq">
+                        <strong>Capacidade:</strong> ${abrigo.capacidade}
+                    </div>
+                    <div class="info-row">
+                        <img src="@image/icones/telefone.svg" alt="Telefone" class="icone-peq">
+                        <strong>Contato:</strong> ${abrigo.telefone}
+                    </div>
+                    <div class="info-row">
+                        <img src="@image/icones/pessoa.svg" alt="Responsável" class="icone-peq">
+                        <strong>Responsável:</strong> ${abrigo.responsavel}
+                    </div>
+                    <div class="info-row">
+                        <img src="@image/icones/info.svg" alt="Observações" class="icone-peq">
+                        <strong>Observações:</strong> ${abrigo.observacoes}
+                    </div>
+                    <div class="info-row" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+                        <img src="@image/icones/mapa.svg" alt="Localização" class="icone">
+                        <a href="https://www.google.com/maps/dir//${lat},${lng}" target="_blank" rel="noopener noreferrer" style="color:var(--dc-orange);text-decoration:none;">
+                            Como chegar →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    // Resetar o estado de expandido ao renderizar
+    abrigoExpandido = null;
+}
+
+// ============================================
+// FUNÇÃO: TOGGLE ABRIGO CARD (APENAS UM POR VEZ)
+// ============================================
+
+function toggleAbrigoCard(index) {
+    // Se já existe um card expandido e é diferente do clicado, fecha ele
+    if (abrigoExpandido !== null && abrigoExpandido !== index) {
+        const bodyAnterior = document.getElementById(`abrigo-body-${abrigoExpandido}`);
+        const iconAnterior = document.getElementById(`toggle-icon-${abrigoExpandido}`);
+        if (bodyAnterior) {
+            bodyAnterior.classList.remove('open');
+        }
+        if (iconAnterior) {
+            iconAnterior.classList.remove('open');
+        }
+    }
+
+    // Alterna o card clicado
+    const body = document.getElementById(`abrigo-body-${index}`);
+    const icon = document.getElementById(`toggle-icon-${index}`);
+    
+    if (body) {
+        // Se o card clicado já está aberto, fecha ele
+        if (body.classList.contains('open')) {
+            body.classList.remove('open');
+            if (icon) icon.classList.remove('open');
+            abrigoExpandido = null;
+        } else {
+            // Senão, abre ele
+            body.classList.add('open');
+            if (icon) icon.classList.add('open');
+            abrigoExpandido = index;
+        }
+    }
+}
+
+// ============================================
+// FUNÇÃO: FECHAR TODOS OS ABRIGOS
+// ============================================
+
+function fecharTodosAbrigos() {
+    // Fecha todos os bodies
+    document.querySelectorAll('.abrigo-card-body').forEach(body => {
+        body.classList.remove('open');
+    });
+    
+    // Fecha todos os ícones
+    document.querySelectorAll('.toggle-icon').forEach(icon => {
+        icon.classList.remove('open');
+    });
+    
+    // Reseta o controle de expandido
+    abrigoExpandido = null;
 }
 
 // ============================================

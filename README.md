@@ -1,18 +1,29 @@
-🚒 Defesa Civil - Site de Alertas e Informações
+🚒 Defesa Civil - Site de Alertas e Informações - Versão 3
 
-	Site institucional para a Defesa Civil municipal, com painel de clima, alertas automáticos, abrigos e informações de contato.
+	Site institucional para a Defesa Civil municipal, com painel de clima, alertas automáticos, abrigos interativos com Street View e informações de contato.
 
 
 📋 SOBRE O PROJETO
 
 	Este é um site estático para a Defesa Civil de Floraí/PR, desenvolvido para fornecer informações atualizadas sobre:
-	- 🌤️ Clima e previsão do tempo (dados da Open-Meteo API)
-	- ⚠️ Alertas automáticos baseados em condições climáticas
-	- 🏠 Abrigos e pontos de apoio
-	- 📍 Mapa de atendimentos
-	- 📱 Postagens de orientação
-	- 👥 Equipe de coordenação
 
+		- 🌤️ Clima e previsão do tempo (dados da Open-Meteo)
+		- 🌡️ Temperaturas mínima e máxima do dia
+		- ⚠️ Alertas automáticos baseados em condições climáticas
+		- 🏠 Abrigos interativos com visualização 3D (Google Street View)
+		- 📍 Mapa de atendimentos (Google My Maps)
+		- 📱 Postagens de orientação com Lightbox
+		- 👥 Equipe de coordenação
+
+🆕 NOVIDADES DA VERSÃO 3
+
+	✅ Temperaturas mínima e máxima exibidas no card de clima
+	✅ Cards de abrigos expansíveis com visualização 3D (sem API Key)
+	✅ Sistema de abrir/fechar apenas um card por vez
+	✅ Fechamento automático dos cards ao fechar o modal
+	✅ Responsividade melhorada para títulos em dispositivos móveis
+	✅ Número de emergência padronizado em todos os modais
+	✅ Ícones SVG novos: seta-baixo, pessoas e pessoa
 
 🛠️ TECNOLOGIAS UTILIZADAS
 
@@ -21,6 +32,7 @@
 	- JavaScript (Vanilla) - Funcionalidades interativas
 	- Open-Meteo API - Dados climáticos em tempo real
 	- Google My Maps - Mapa de abrigos
+	- Google Street View - Visualização 3D dos abrigos (sem API Key)
 
 
 📁 ESTRUTURA DE ARQUIVOS
@@ -34,8 +46,8 @@
 	│   ├── 📁 icones/    	  # Ícones SVG
 	│   ├── 📁 logotipos/ 	  # Logotipos (defciv.svg, florai.png, etc)
 	│   └── 📁 perfil/   	  # Imagens de perfil da equipe da defesa civil
-	│   └── 📁 posts/  	      # Imagens do Instagram (1.jpg, 2.jpg, etc)
-	└── README.md             # Este arquivo
+	│   └── 📁 posts/   	  # Imagens do Instagram (1.jpg, 2.jpg, etc)
+	└── README.md            # Este arquivo
 
 	Obs.: As páginas index.html dentro de outras pastas, servem apenas para 
 	redirecionar o acesso para a página principal
@@ -91,23 +103,30 @@
 			</a>
 
 
-		C) Abrigos (index.html - Modal)
+		C) Abrigos com Street View (script.js)
 
-		Edite a lista no modal de abrigos (linhas 192-225):
+		Edite a lista de abrigos na função `renderAbrigos()`:
 
-			html
-			<div style="display:flex;flex-direction:column;gap:12px;">
-			    <!-- Exemplo de abrigo -->
-			    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
-			        <img src="@image/icones/escola.svg" alt="Ícone" class="icone">
-			        <div>
-						            <strong>NOME DO ABRIGO</strong>
-			            <div style="font-size:0.8rem;color:var(--text-secondary);padding-top: 2px;"> ENDEREÇO COMPLETO</div>
-			            <div style="font-size:0.8rem;color:var(--text-secondary);padding-top: 2px;"> Capacidade: XX pessoas</div>
-			        </div>
-			    </div>
-			    <!-- REPITA PARA CADA ABRIGO -->
-			</div>
+			javascript
+			const abrigos = [
+			    {
+			        nome: 'NOME DO ABRIGO',
+			        endereco: 'RUA, NÚMERO',
+			        capacidade: 'XX pessoas',
+			        telefone: '(XX) XXXX-XXXX',
+			        observacoes: 'Descrição do abrigo (região, características)',
+			        responsavel: 'Nome do responsável',
+			        iframe: 'LINK DO GOOGLE MAPS STREET VIEW'
+			    },
+			    // REPITA PARA CADA ABRIGO
+			];
+
+			📌 Como obter o iframe do abrigo:
+			1. Abra o Google Maps e encontre o local do abrigo
+			2. Clique no ícone de "Street View" (bonequinho amarelo)
+			3. Posicione a câmera no ângulo desejado
+			4. Clique no menu (três pontos) → "Compartilhar" → "Incorporar mapa"
+			5. Copie o link do iframe (ex: https://www.google.com/maps/embed?pb=!4v...)
 
 
 		D) Contato (index.html - Modal)
@@ -145,16 +164,24 @@
 
 			Substitua os arquivos na pasta `@image/`:
 
-				Arquivo 				Onde é usado		Descrição
+				Arquivo 						Onde é usado			Descrição
 
-		@image/logotipos/florai.png 	Navbar 			Brasão da cidade
-		@image/logotipos/defciv.svg 	Navbar, Hero, Modal	Logo da Defesa Civil
-		@image/logotipos/simepar.png 	Links			Logo do SIMEPAR
-		@image/logotipos/inmet.png 	Links 			Logo do INMET
-		@image/logotipos/instagram.png 	Links 			Logo do Instagram
-		@image/perfil/1.svg 		Equipe 			Fotos dos membros
-		@image/posts/1.jpg a 4.jpg 	Instagram Grid 		Postagens de orientação
-		@image/wallpaper.jpg 		Fundo 			Imagem de fundo do site
+				@image/logotipos/florai.png 	Navbar 					Brasão da cidade
+				@image/logotipos/defciv.svg 	Navbar, Hero, Modal		Logo da Defesa Civil
+				@image/logotipos/simepar.png 	Links					Logo do SIMEPAR
+				@image/logotipos/inmet.png 		Links 					Logo do INMET
+				@image/logotipos/instagram.png 	Links 					Logo do Instagram
+				@image/perfil/1.svg 			Equipe 					Fotos dos membros
+				@image/posts/1.jpg a 4.jpg 		Instagram Grid 			Postagens de orientação
+				@image/wallpaper.jpg 			Fundo 					Imagem de fundo do site
+
+			Certifique-se de criar ou baixar os seguintes ícones SVG:
+
+				Arquivo 						Onde é usado			Descrição
+ 
+				seta-baixo.svg					Seta para baixo			Toggle dos cards de abrigo
+				pessoas.svg						Grupo de pessoas		Capacidade dos abrigos
+				pessoa.svg						Mãos de ajuda			Responsável do abrigo
 
 
 	4️⃣ ATUALIZAR MAPA (index.html)
@@ -227,8 +254,12 @@
 
 		Recurso		Descrição
 
-		Open-Meteo API	Dados climáticos (gratuito, sem chave)
-		Google Maps 	Cadastros personalizados de locais no My Maps
+		Open-Meteo API		Dados climáticos (gratuito, sem chave)
+		Google Maps 		Cadastros personalizados de locais no My Maps
+		Google Street View	Embed para visualização 3D dos abrigos (sem API Key)
+
+	⚠️ IMPORTANTE: O sistema de Street View NÃO requer API Key do Google. 
+	Usamos iframes estáticos do Google Maps Embed.
 
 
 📄 LICENÇA
