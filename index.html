@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Defesa Civil - Floraí/PR</title>
+    <title>Defesa Civil de Floraí</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="@image/logotipos/defciv.svg">
 </head>
@@ -18,16 +18,18 @@
     <div class="theme-overlay"></div>
 
     <div class="container">
-        <!-- NAVBAR -->
+
+        <!-- Barra de Navegação -->
         <nav class="navbar">
             <div class="nav-container">
+                <!-- Logo (esquerda no desktop, centralizado no mobile) -->
                 <div class="logo">
-                    <img src="@image/logotipos/florai.png" alt="Brazão de Floraí" class="logo-img">
                     <img src="@image/logotipos/defciv.svg" alt="Logo Defesa Civil" class="logo-img">
-                    <span class="logo-text">Defesa Civil de Floraí/PR</span>
+                    <span class="logo-text">Defesa Civil de Floraí</span>
                 </div>
 
-                <ul class="nav-menu">
+                <!-- Menu Desktop (visível apenas em desktop) -->
+                <ul class="nav-menu nav-menu-desktop">
                     <li class="nav-item">
                         <a href="#" class="nav-link" onclick="openModal('modal-alertas')">Previsão</a>
                     </li>
@@ -40,25 +42,37 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link" onclick="openModal('modal-contato')">Contato</a>
                     </li>
-                    <li class="nav-item theme-desktop-item">
+                    <li class="nav-item">
                         <button class="nav-link theme-btn" id="theme-toggle-desktop" aria-label="Alternar tema">
                             <img src="@image/icones/lua.svg" alt="Tema" class="theme-icon-img" id="theme-icon-desktop">
                         </button>
                     </li>
                 </ul>
 
-                <div class="nav-controls">
-                    <button class="theme-mobile-btn" id="theme-toggle-mobile" aria-label="Alternar tema">
-                        <img src="@image/icones/lua.svg" alt="Tema" class="theme-icon-img" id="theme-icon-mobile">
-                    </button>
-                    <button class="hamburger" id="hamburger-btn">
-                        <img src="@image/icones/menu.svg" alt="Menu" class="icon" width="20" height="20">
-                    </button>
-                </div>
+                <!-- Menu Mobile (visível apenas em mobile - logo centralizado com botões embaixo) -->
+                <ul class="nav-menu nav-menu-mobile">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="openModal('modal-alertas')">Previsão</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="openModal('modal-abrigos')">Abrigos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="openModal('modal-equipe')">Equipe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="openModal('modal-contato')">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link theme-btn" id="theme-toggle-mobile-nav" aria-label="Alternar tema">
+                            <img src="@image/icones/lua.svg" alt="Tema" class="theme-icon-img" id="theme-icon-mobile-nav">
+                        </button>
+                    </li>
+                </ul>
             </div>
         </nav>
 
-        <!-- CONTEÚDO PRINCIPAL -->
+        <!-- Área de Conteúdo -->
         <div class="search-hero">
             <div class="search-container">
 
@@ -66,20 +80,19 @@
                     <img src="@image/logotipos/defciv.svg" alt="Defesa Civil Floraí" class="hero-icon">
                 </div>
 
-                <!-- TÍTULO PRINCIPAL -->
+                <!-- Título do Website -->
                 <h1 class="hero-title">
                     Proteção e Defesa Civil 
                     <span class="hero-divider">-</span>
-                    <span class="hero-city"><span>Floraí/PR</span></span>
+                    <span class="hero-city"><span>Floraí</span></span>
                 </h1>
 
-                <!-- DASHBOARD GRID -->
                 <div class="dashboard-grid">
 
-                    <!-- CLIMA ATUAL -->
+                    <!-- Card do Tempo Atual -->
                     <div class="dashboard-card">
                         <div class="card-title">
-                            <img src="@image/icones/sol-nuvem.svg" alt="Ícone" class="icone"> Clima Atual em<span id="weather-city">Carregando...</span>
+                            <img src="@image/icones/sol-nuvem.svg" alt="Ícone" class="icone"> Tempo em<span id="weather-city">Carregando...</span>
                         </div>
                         <div class="weather-info">
                             <div class="weather-icon-big" id="weather-icon">
@@ -88,7 +101,6 @@
 
                             <div>
                                 <div class="weather-temp" id="weather-temp">--° <small>C</small></div>
-                                <!-- Min e Max abaixo da sensação -->
                                 <div class="weather-temp-minmax">
                                     <span class="min">↓ <span id="weather-min">--</span>°</span>
                                     <span class="max">↑ <span id="weather-max">--</span>°</span>
@@ -108,10 +120,10 @@
                         </div>
                     </div>
 
-                    <!-- ALERTAS -->
+                    <!-- Card de Avisos e Alertas -->
                     <div id="alert-card" class="dashboard-card alert-normal">
                         <div class="card-title">
-                            <img src="@image/icones/megafone.svg" alt="Ícone" class="icone"> Avisos e Alertas Climáticos
+                            <img src="@image/icones/megafone.svg" alt="Ícone" class="icone"> Avisos e Alertas
                         </div>
                         <div class="alert-content-box">
                             <div>
@@ -119,44 +131,42 @@
                                 <div id="alert-description" class="alert-desc-text">
                                     Não há avisos emergenciais para Floraí/PR neste momento. Aproveite para se prevenir com nossas orientações no <a href="https://www.instagram.com/defesacivilflorai"> @defesacivilflorai</a>
                                 </div>
-                                <!-- Período de vigência caso exista um alerta -->
                                 <div id="alert-period" class="alert-time-text" style="display:none;"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ATALHOS -->
+                    <!-- Card dos Links Oficiais -->
                     <div class="dashboard-card full">
-                        <div class="card-title"><img src="@image/icones/link.svg" alt="Ícone" class="icone"> Links de acesso a informações oficiais</div>
+                        <div class="card-title"><img src="@image/icones/link.svg" alt="Ícone" class="icone"> Links de informações oficiais</div>
                         <div class="links-grid">
+                            <a href="https://www.instagram.com/defesacivilflorai/" target="_blank" rel="noopener noreferrer" class="theme-link-btn">
+                                <img src="@image/logotipos/FL.svg" alt="Ícone" class="icone-peq"> Floraí - Instagram
+                            </a>
                             <a href="https://www.simepar.br/simepar/forecast_by_counties/4107801" target="_blank" rel="noopener noreferrer" class="theme-link-btn">
-                                <img src="@image/logotipos/simepar.png" alt="Ícone" class="icone-peq"> Avisos do SIMEPAR
+                                <img src="@image/logotipos/PR.svg" alt="Ícone" class="icone-peq"> Paraná - SIMEPAR
                             </a>
                             <a href="https://portal.inmet.gov.br/" target="_blank" rel="noopener noreferrer" class="theme-link-btn">
-                                <img src="@image/logotipos/inmet.png" alt="Ícone" class="icone-peq"> Avisos do INMET
-                            </a>
-                            <a href="https://www.instagram.com/defesacivilflorai/" target="_blank" rel="noopener noreferrer" class="theme-link-btn">
-                                <img src="@image/logotipos/instagram.png" alt="Ícone" class="icone-peq"> Avisos no Instagram
+                                <img src="@image/logotipos/BR.svg" alt="Ícone" class="icone-peq"> Brasil - INMET
                             </a>
                         </div>
                     </div>
 
-                    <!-- MAPA -->
+                    <!-- Card do Mapa de Apoio -->
                     <div class="dashboard-card full">
-                        <div class="card-title"><img src="@image/icones/mapa.svg" alt="Ícone" class="icone"> Mapa de Atendimentos e Abrigos</div>
+                        <div class="card-title"><img src="@image/icones/mapa.svg" alt="Ícone" class="icone"> Mapa de Pontos de Apoio</div>
                         <div class="map-wrapper">
                             <iframe src="https://www.google.com/maps/d/embed?mid=1QePHcw0cHKCdaEF1GNpDlZ3kb4R15qs&ehbc=2E312F&noprof=1" allowfullscreen loading="lazy"></iframe>
                         </div>
                         <div class="centralizar-update">
-                            <img src="@image/icones/info.svg" alt="Ícone" class="icone-peq"> Abrigos: 4 | Postos de Atendimento: 2 | Pontos de Apoio: 2
+                            <img src="@image/icones/info.svg" alt="Ícone" class="icone-peq"> 4 Abrigos | 1 Posto de Emergência | 1 Ponto de Pouso | 2 Pontos de Apoio | 3 Rotas de Saída
                         </div>
                     </div>
 
-                    <!-- INSTAGRAM CARROSSEL -->
+                    <!-- Card de Recomendações -->
                     <div class="dashboard-card full">
-                        <div class="card-title"><img src="@image/icones/note.svg" alt="Ícone" class="icone"> Postagens de Orientação</div>
+                        <div class="card-title"><img src="@image/icones/note.svg" alt="Ícone" class="icone"> Orientações de Utilidade Pública</div>
                         <div class="instagram-grid" id="instagramGrid">
-                            <!-- Preenchido via JS -->
                             <div class="insta-item">
                                 <img src="@image/icones/foto.svg" alt="Ícone" class="icone">
                                 <div class="insta-overlay">@defesacivilflorai</div>
@@ -176,9 +186,9 @@
                         </div>
                     </div>
 
-                    <!-- ÁREA TÉCNICA -->
+                    <!-- Cursos para Agentes -->
                     <div class="dashboard-card full">
-                        <div class="card-title"><img src="@image/icones/livros.svg" alt="Ícone" class="icone"> Capacitação para Equipes</div>
+                        <div class="card-title"><img src="@image/icones/livros.svg" alt="Ícone" class="icone"> Cursos de Capacitação</div>
                         <div class="links-grid">
                             <a href="https://www.escolavirtual.gov.br/curso/885" target="_blank" rel="noopener noreferrer" class="theme-link-btn">
                                 <img src="@image/icones/prancheta.svg" alt="Ícone" class="icone-peq"> Curso de Alertas Públicos (Idap)
@@ -191,16 +201,17 @@
 
                 </div>
             </div>
-            <span class="rodape">Desenvolvido por <a href="https://ghenrique.com.br" target="_blank" rel="noopener noreferrer">Guilherme Henrique</a> Uso livre nos termos da <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">GNU GPLv3</a> Código-fonte em: <a href="https://github.com/thegui44/DefesaCivil.git" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <span class="rodape">&copy; 2026 | <a href="https://ghenrique.com.br" target="_blank" rel="noopener noreferrer">Guilherme Henrique</a>
+                <br class="mobile-break"> Uso livre nos termos <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">GNU GPLv3</a>
+                <br class="mobile-break"> Código-fonte em: <a href="https://github.com/thegui44/DefesaCivil.git" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <br class="mobile-break"> Versão 4
             </span>
         </div>
     </div>
 
-    <!-- ============================================
-    MODAIS
-    ============================================ -->
+    <!-- ===== Modais da Barra de Navegação ===== -->
 
-    <!-- MODAL ALERTAS -->
+    <!-- Modal de Alerta -->
     <div class="modal" id="modal-alertas">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal-alertas')">
@@ -212,7 +223,6 @@
                 <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;">
                     <div>
                         <main>
-                            <!-- Os alertas serão exibidos aqui -->
                             <div id="painel-alertas" class="painel-container">
                                 <p class="carregando"><img src="@image/icones/tempo.svg" alt="Ícone" class="icone-peq"> Buscando dados meteorológicos...</p>
                             </div>
@@ -220,14 +230,13 @@
                     </div>
                 </div>
             </div>
-            <!-- Rodapé com número de emergência igual ao modal previsão -->
             <div style="margin-top:16px;padding:12px;background:rgba(250,169,84,0.1);border-radius:8px;text-align:center;font-size:0.85rem;color:var(--text-secondary);display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;">
                 <img src="@image/icones/monofone.svg" alt="Telefone" class="icone-peq"> Emergência: <strong>199</strong> | Defesa Civil: (44) 3242-8300
             </div>
         </div>
     </div>
 
-    <!-- MODAL ABRIGOS -->
+    <!-- Modal de Abrigos -->
     <div class="modal" id="modal-abrigos">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal-abrigos')">
@@ -236,16 +245,14 @@
             <h2 class="modal-title"><img src="@image/icones/casa.svg" alt="Ícone" class="icone"> Abrigos e Pontos de Apoio</h2>
             <p class="modal-desc">Locais seguros para acolhimento em situações de emergência. Clique em cada abrigo para ver mais informações.</p>
             <div id="abrigos-container">
-                <!-- Abrigos serão renderizados via JavaScript -->
             </div>
-            <!-- Rodapé com número de emergência -->
             <div style="margin-top:16px;padding:12px;background:rgba(250,169,84,0.1);border-radius:8px;text-align:center;font-size:0.85rem;color:var(--text-secondary);display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;">
                 <img src="@image/icones/monofone.svg" alt="Telefone" class="icone-peq"> Emergência: <strong>199</strong> | Defesa Civil: (44) 3242-8300
             </div>
         </div>
     </div>
 
-    <!-- MODAL EQUIPE -->
+    <!-- Modal de Equipe -->
     <div class="modal" id="modal-equipe">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal-equipe')">
@@ -273,7 +280,7 @@
         </div>
     </div>
 
-    <!-- MODAL CONTATO -->
+    <!-- Modal de Contatos -->
     <div class="modal" id="modal-contato">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal-contato')">
@@ -300,7 +307,7 @@
                     <span style="font-size:1.3rem;"><img src="@image/icones/email.svg" alt="Ícone" class="icone"></span>
                     <div>
                         <strong>E-mail</strong>
-                        <div style="color:var(--text-secondary);">defesacivil@florai.pr.gov.br</div>
+                        <div style="color:var(--text-secondary);">meioambiente@florai.pr.gov.br</div>
                     </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;color:var(--text-primary);">
@@ -314,7 +321,7 @@
         </div>
     </div>
 
-    <!-- LIGHTBOX / VISUALIZADOR DE IMAGENS -->
+    <!-- Visualizador de Imagens -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
         <div class="lightbox-content" onclick="event.stopPropagation()">
             <button class="lightbox-close" onclick="closeLightbox()">✕</button>

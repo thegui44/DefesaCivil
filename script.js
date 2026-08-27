@@ -4,9 +4,9 @@
 
 const html = document.documentElement;
 const themeToggleDesktop = document.getElementById("theme-toggle-desktop");
-const themeToggleMobile = document.getElementById("theme-toggle-mobile");
+const themeToggleMobileNav = document.getElementById("theme-toggle-mobile-nav");
 const themeIconDesktop = document.getElementById("theme-icon-desktop");
-const themeIconMobile = document.getElementById("theme-icon-mobile");
+const themeIconMobileNav = document.getElementById("theme-icon-mobile-nav");
 
 function toggleTheme() {
     const currentTheme = html.getAttribute('data-theme');
@@ -20,11 +20,11 @@ function updateThemeIcons(theme) {
     const iconPath = theme === 'light' ? '@image/icones/lua.svg' : '@image/icones/sol.svg';
     const altText = theme === 'light' ? 'Alternar para tema escuro' : 'Alternar para tema claro';
     if (themeIconDesktop) { themeIconDesktop.src = iconPath; themeIconDesktop.alt = altText; }
-    if (themeIconMobile) { themeIconMobile.src = iconPath; themeIconMobile.alt = altText; }
+    if (themeIconMobileNav) { themeIconMobileNav.src = iconPath; themeIconMobileNav.alt = altText; }
 }
 
 if (themeToggleDesktop) themeToggleDesktop.addEventListener("click", toggleTheme);
-if (themeToggleMobile) themeToggleMobile.addEventListener("click", toggleTheme);
+if (themeToggleMobileNav) themeToggleMobileNav.addEventListener("click", toggleTheme);
 
 // ============================================
 // 2. MODAIS
@@ -74,55 +74,10 @@ document.addEventListener('click', (e) => {
 });
 
 // ============================================
-// 3. NAVEGAÇÃO MOBILE
+// 3. NAVEGAÇÃO MOBILE - REMOVIDA (não usa hamburger)
 // ============================================
 
-function setupMobileNavigation() {
-    const hamburger = document.getElementById("hamburger-btn");
-    const navMenu = document.querySelector(".nav-menu");
-
-    function toggleMenu() {
-        navMenu.classList.toggle("active");
-        if (hamburger) {
-            const icon = hamburger.querySelector('img');
-            if (icon) {
-                icon.src = navMenu.classList.contains("active") ?
-                    '@image/icones/close.svg' :
-                    '@image/icones/menu.svg';
-            }
-        }
-    }
-
-    if (hamburger) {
-        hamburger.addEventListener("click", function(e) {
-            e.stopPropagation();
-            toggleMenu();
-        });
-    }
-
-    document.addEventListener('click', (e) => {
-        if (navMenu && navMenu.classList.contains('active') &&
-            !e.target.closest('.navbar')) {
-            navMenu.classList.remove("active");
-            if (hamburger) {
-                const icon = hamburger.querySelector('img');
-                if (icon) icon.src = '@image/icones/menu.svg';
-            }
-        }
-    });
-
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            if (navMenu && navMenu.classList.contains('active')) {
-                navMenu.classList.remove("active");
-                if (hamburger) {
-                    const icon = hamburger.querySelector('img');
-                    if (icon) icon.src = '@image/icones/menu.svg';
-                }
-            }
-        }
-    });
-}
+// A função setupMobileNavigation foi removida pois não usamos mais hamburger
 
 // ============================================
 // 4. EQUIPE - PREENCHIMENTO DINÂMICO
@@ -272,7 +227,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     renderTeam();
     renderInstagram();
-    setupMobileNavigation();
     renderAbrigos();
 
     console.log('Iniciando busca de dados climáticos (Open-Meteo)...');
