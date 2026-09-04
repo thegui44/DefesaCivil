@@ -454,7 +454,6 @@ p, h3, span {
     width: 80px;
     height: 80px;
     display: block;
-    filter: drop-shadow(2px 2px 4px rgba(83, 83, 83, 0.674));
 }
 
 .weather-col-left .weather-condition {
@@ -1725,10 +1724,6 @@ p, h3, span {
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
-}
-
-.icone-loading {
-    animation: spin 1s linear infinite;
 }
 
 /* Scrollbar */

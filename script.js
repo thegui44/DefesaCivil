@@ -365,34 +365,34 @@ console.log('Atalhos: ESC fecha modais | M alterna tema | ← → navega no ligh
 // ================================================================
 
 const WEATHER_CODES = {
-    0: { description: 'Céu limpo', emoji: 'sol.svg' },
-    1: { description: 'Predominantemente limpo', emoji: 'sol-nuvem.svg' },
-    2: { description: 'Parcialmente nublado', emoji: 'nuvem-sol.svg' },
-    3: { description: 'Nublado', emoji: 'nuvem.svg' },
-    45: { description: 'Nevoeiro', emoji: 'nevoeiro.svg' },
-    48: { description: 'Nevoeiro com geada', emoji: 'nevoeiro.svg' },
-    51: { description: 'Garoa fina', emoji: 'chuva-fraca.svg' },
-    53: { description: 'Garoa moderada', emoji: 'chuva-fraca.svg' },
-    55: { description: 'Garoa forte', emoji: 'chuva.svg' },
-    61: { description: 'Chuva fraca', emoji: 'chuva.svg' },
-    63: { description: 'Chuva moderada', emoji: 'chuva.svg' },
-    65: { description: 'Chuva forte', emoji: 'chuva.svg' },
-    71: { description: 'Neve fraca', emoji: 'neve.svg' },
-    73: { description: 'Neve moderada', emoji: 'neve.svg' },
-    75: { description: 'Neve forte', emoji: 'neve.svg' },
-    77: { description: 'Grãos de neve', emoji: 'neve.svg' },
-    80: { description: 'Chuvisco fraco', emoji: 'chuva-fraca.svg' },
-    81: { description: 'Chuvisco moderado', emoji: 'chuva.svg' },
-    82: { description: 'Chuvisco forte', emoji: 'chuva.svg' },
-    85: { description: 'Neve fraca', emoji: 'neve.svg' },
-    86: { description: 'Neve forte', emoji: 'neve.svg' },
-    95: { description: 'Tempestade fraca', emoji: 'tempestade.svg' },
-    96: { description: 'Tempestade com granizo', emoji: 'tempestade.svg' },
-    99: { description: 'Tempestade com granizo forte', emoji: 'tempestade.svg' }
+    0: { description: 'Céu limpo', emoji: 'animado/sol.png' },
+    1: { description: 'Predominantemente limpo', emoji: 'animado/sol-nuvem.png' },
+    2: { description: 'Parcialmente nublado', emoji: 'animado/nuvem-sol.png' },
+    3: { description: 'Nublado', emoji: 'animado/nuvem.png' },
+    45: { description: 'Nevoeiro', emoji: 'animado/nevoeiro.png' },
+    48: { description: 'Nevoeiro com geada', emoji: 'animado/nevoeiro.png' },
+    51: { description: 'Garoa fina', emoji: 'animado/chuva-fraca.png' },
+    53: { description: 'Garoa moderada', emoji: 'animado/chuva-fraca.png' },
+    55: { description: 'Garoa forte', emoji: 'animado/chuva.png' },
+    61: { description: 'Chuva fraca', emoji: 'animado/chuva.png' },
+    63: { description: 'Chuva moderada', emoji: 'animado/chuva.png' },
+    65: { description: 'Chuva forte', emoji: 'animado/chuva.png' },
+    71: { description: 'Neve fraca', emoji: 'animado/neve.png' },
+    73: { description: 'Neve moderada', emoji: 'animado/neve.png' },
+    75: { description: 'Neve forte', emoji: 'animado/neve.png' },
+    77: { description: 'Grãos de neve', emoji: 'animado/neve.png' },
+    80: { description: 'Chuvisco fraco', emoji: 'animado/chuva-fraca.png' },
+    81: { description: 'Chuvisco moderado', emoji: 'animado/chuva.png' },
+    82: { description: 'Chuvisco forte', emoji: 'animado/chuva.png' },
+    85: { description: 'Neve fraca', emoji: 'animado/neve.png' },
+    86: { description: 'Neve forte', emoji: 'animado/neve.png' },
+    95: { description: 'Tempestade fraca', emoji: 'animado/tempestade.png' },
+    96: { description: 'Tempestade com granizo', emoji: 'animado/tempestade.png' },
+    99: { description: 'Tempestade com granizo forte', emoji: 'animado/tempestade.png' }
 };
 
 function getWeatherInfo(code) {
-    return WEATHER_CODES[code] || { description: 'Condição desconhecida', emoji: 'interrogacao.svg' };
+    return WEATHER_CODES[code] || { description: 'Condição desconhecida', emoji: 'animado/satelite.png' };
 }
 
 function getWeatherSVG(emoji) {
@@ -557,7 +557,7 @@ function resetAlertCards() {
     if (headlineInmet) {
         headlineInmet.innerHTML = `
             <span class="alert-title-text">
-                <img src="@image/icones/tempo.svg" alt="Carregando" class="alert-icon icone-loading"> 
+                <img src="@image/icones/animado/load.png" alt="Carregando" class="alert-icon"> 
                 Carregando...
             </span>
         `;
@@ -575,7 +575,7 @@ function resetAlertCards() {
     if (headlineOpen) {
         headlineOpen.innerHTML = `
             <span class="alert-title-text">
-                <img src="@image/icones/tempo.svg" alt="Carregando" class="alert-icon icone-loading"> 
+                <img src="@image/icones/animado/load.png" alt="Carregando" class="alert-icon"> 
                 Carregando...
             </span>
         `;
@@ -611,7 +611,7 @@ async function fetchWeatherData() {
     };
     
     // Estado de carregamento
-    if (elements.icon) elements.icon.innerHTML = `<img src="@image/icones/tempo.svg" alt="Carregando" style="width:80px;height:80px;">`;
+    if (elements.icon) elements.icon.innerHTML = `<img src="@image/icones/animado/load.png" alt="Carregando" style="width:80px;height:80px;">`;
     if (elements.temp) elements.temp.innerHTML = '--°';
     if (elements.city) elements.city.innerText = 'Carregando...';
     if (elements.min) elements.min.innerText = '--';
@@ -765,7 +765,7 @@ function mostrarErroClima(mensagem) {
     if (els.sunset) els.sunset.innerText = '--:--';
     if (els.moon) els.moon.innerText = '--';
     if (els.icon) {
-        els.icon.innerHTML = `<img src="@image/icones/interrogacao.svg" alt="Indisponível" style="width:80px;height:80px;">`;
+        els.icon.innerHTML = `<img src="@image/icones/animado/satelite.png" alt="Indisponível" style="width:80px;height:80px;">`;
     }
     if (els.updated) els.updated.innerText = new Date().toLocaleString('pt-BR');
 }
