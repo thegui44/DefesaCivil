@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Defesa Civil de Floraí</title>
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
     <link rel="icon" type="image/svg+xml" href="@image/logotipos/defciv.svg">
 </head>
 
@@ -19,19 +19,19 @@
 
     <div class="container">
 
-        <!-- Barra de Navegação -->
+        <!-- ========== BARRA DE NAVEGAÇÃO ========== -->
         <nav class="navbar">
             <div class="nav-container">
-                <!-- Logo (esquerda no desktop, centralizado no mobile) -->
+
                 <div class="logo">
                     <img src="@image/logotipos/defciv.svg" alt="Logo Defesa Civil" class="logo-img">
                     <span class="logo-text">Defesa Civil de Floraí</span>
                 </div>
 
-                <!-- Menu Desktop (visível apenas em desktop) -->
+                <!-- Menu Desktop -->
                 <ul class="nav-menu nav-menu-desktop">
                     <li class="nav-item">
-                        <a href="#" class="nav-link" onclick="openModal('modal-alertas')">Previsão</a>
+                        <a href="#" class="nav-link" onclick="openModal('modal-previsao')">Previsão</a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link" onclick="openModal('modal-abrigos')">Abrigos</a>
@@ -49,10 +49,10 @@
                     </li>
                 </ul>
 
-                <!-- Menu Mobile (visível apenas em mobile - logo centralizado com botões embaixo) -->
+                <!-- Menu Mobile -->
                 <ul class="nav-menu nav-menu-mobile">
                     <li class="nav-item">
-                        <a href="#" class="nav-link" onclick="openModal('modal-alertas')">Previsão</a>
+                        <a href="#" class="nav-link" onclick="openModal('modal-previsao')">Previsão</a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link" onclick="openModal('modal-abrigos')">Abrigos</a>
@@ -69,76 +69,162 @@
                         </button>
                     </li>
                 </ul>
+
             </div>
         </nav>
 
-        <!-- Área de Conteúdo -->
-        <div class="search-hero">
-            <div class="search-container">
+        <!-- ========== CONTEÚDO PRINCIPAL ========== -->
+        <div class="main-content">
+            <div class="content-wrapper">
 
-                <div class="hero-image-desktop">
+                <!-- Logo no topo -->
+                <div class="hero-image">
                     <img src="@image/logotipos/defciv.svg" alt="Defesa Civil Floraí" class="hero-icon">
                 </div>
 
-                <!-- Título do Website -->
-                <h1 class="hero-title">
-                    Proteção e Defesa Civil 
-                    <span class="hero-divider">-</span>
-                    <span class="hero-city"><span>Floraí</span></span>
+                <!-- Título -->
+                <h1 class="main-title">
+                    Painel de Avisos e Ações de Floraí
                 </h1>
 
+                <!-- ========== GRID DE CARDS ========== -->
                 <div class="dashboard-grid">
 
-                    <!-- Card do Tempo Atual -->
-                    <div class="dashboard-card">
-                        <div class="card-title">
-                            <img src="@image/icones/sol-nuvem.svg" alt="Ícone" class="icone"> Tempo em<span id="weather-city">Carregando...</span>
-                        </div>
-                        <div class="weather-info">
-                            <div class="weather-icon-big" id="weather-icon">
-                                <img src="@image/icones/tempo.svg" alt="Ícone" class="icone">
+                    <!-- ===== CARD DO TEMPO ===== -->
+                    <div class="weather-column">
+                        <div class="dashboard-card  weather-card">
+                            <div class="card-title weather-card-title">
+                                <img src="@image/icones/sol-nuvem.svg" alt="Ícone" class="icone"> 
+                                <span>Tempo em <span id="weather-city">Carregando...</span></span>
                             </div>
 
-                            <div>
-                                <div class="weather-temp" id="weather-temp">--° <small>C</small></div>
-                                <div class="weather-temp-minmax">
-                                    <span class="min">↓ <span id="weather-min">--</span>°</span>
-                                    <span class="max">↑ <span id="weather-max">--</span>°</span>
+                            <div class="weather-grid">
+                                <!-- Coluna Esquerda -->
+                                <div class="weather-col-left">
+                                    <div class="weather-icon-big" id="weather-icon">
+                                        <img src="@image/icones/tempo.svg" alt="Ícone">
+                                    </div>
+                                    <div class="weather-condition" id="weather-condition">Carregando...</div>
+                                    <div class="weather-temp-block">
+                                        <span class="weather-temp-value" id="weather-temp">--°</span>
+                                        <span class="weather-temp-unit">C</span>
+                                    </div>
+                                    <div class="weather-minmax">
+                                        <span class="weather-max">↑ Máx: <strong id="weather-max">--</strong>°</span>
+                                        <span class="weather-min">↓ Mín: <strong id="weather-min">--</strong>°</span>
+                                    </div>
+                                </div>
+
+                                <!-- Coluna Direita -->
+                                <div class="weather-col-right">
+                                    <div class="weather-detail-item">
+                                        <img src="@image/icones/calor.svg" alt="Sensação" class="detail-icon">
+                                        <span class="detail-label">Sensação</span>
+                                        <span class="detail-value" id="weather-feels">--°C</span>
+                                    </div>
+                                    <div class="weather-detail-item">
+                                        <img src="@image/icones/gota.svg" alt="Umidade" class="detail-icon">
+                                        <span class="detail-label">Umidade</span>
+                                        <span class="detail-value" id="weather-humidity">--%</span>
+                                    </div>
+                                    <div class="weather-detail-item">
+                                        <img src="@image/icones/vento.svg" alt="Vento" class="detail-icon">
+                                        <span class="detail-label">Vento</span>
+                                        <span class="detail-value" id="weather-wind">-- km/h</span>
+                                    </div>
+                                    <div class="weather-detail-item">
+                                        <img src="@image/icones/tornado.svg" alt="Rajada" class="detail-icon">
+                                        <span class="detail-label">Rajada</span>
+                                        <span class="detail-value" id="weather-gust">-- km/h</span>
+                                    </div>
+                                    <div class="weather-detail-item">
+                                        <img src="@image/icones/chuva.svg" alt="Precipitação" class="detail-icon">
+                                        <span class="detail-label">Precipitação</span>
+                                        <span class="detail-value" id="weather-precip">-- mm</span>
+                                    </div>
+                                    <div class="weather-detail-item">
+                                        <img src="@image/icones/probabilidade.svg" alt="Probabilidade" class="detail-icon">
+                                        <span class="detail-label">Prob. Chuva</span>
+                                        <span class="detail-value" id="weather-rain-prob">--%</span>
+                                    </div>
+                                    <div class="weather-detail-item">
+                                        <img src="@image/icones/nascer.svg" alt="Nascer" class="detail-icon">
+                                        <span class="detail-label">Nascer</span>
+                                        <span class="detail-value" id="weather-sunrise">--:--</span>
+                                    </div>
+                                    <div class="weather-detail-item">
+                                        <img src="@image/icones/por-sol.svg" alt="Pôr do sol" class="detail-icon">
+                                        <span class="detail-label">Pôr do Sol</span>
+                                        <span class="detail-value" id="weather-sunset">--:--</span>
+                                    </div>
+                                    <div class="weather-detail-item">
+                                        <img src="@image/icones/luanova.svg" alt="Lua" class="detail-icon" id="weather-moon-img">
+                                        <span class="detail-label">Lua</span>
+                                        <span class="detail-value" id="weather-moon-text">--</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div>
-                                <div class="weather-details">
-                                    <span class="centralizar-info"><img src="@image/icones/gota.svg" alt="Ícone" class="icone-peq"> Umidade: <span id="weather-humidity">--%</span></span>
-                                    <span class="centralizar-info"><img src="@image/icones/vento.svg" alt="Ícone" class="icone-peq"> Vento: <span id="weather-wind">-- km/h</span></span>
-                                    <span class="centralizar-info"><img src="@image/icones/calor.svg" alt="Ícone" class="icone-peq"> Sensação: <span id="weather-feels">--°C</span></span>
-                                </div>
+                            <div class="weather-update">
+                                <span class="weather-updated-time">
+                                    <img src="@image/icones/relogio.svg" alt="Ícone" class="icone-peq"> 
+                                    Atualizado: <span id="weather-updated">--/--/---- --:--</span> por Open-Meteo
+                                </span>
                             </div>
-                        </div>
-                        <div class="centralizar-update">
-                            <img src="@image/icones/relogio.svg" alt="Ícone" class="icone-peq"> Atualizado: <span id="weather-updated">--/--/---- --:--</span>
+
                         </div>
                     </div>
 
-                    <!-- Card de Avisos e Alertas -->
-                    <div id="alert-card" class="dashboard-card alert-normal">
-                        <div class="card-title">
-                            <img src="@image/icones/megafone.svg" alt="Ícone" class="icone"> Avisos e Alertas
-                        </div>
-                        <div class="alert-content-box">
-                            <div>
-                                <div id="alert-headline" class="alert-title-text"><img src="@image/icones/check.svg" alt="Ícone" class="icone"> Condições Normais</div><br>
-                                <div id="alert-description" class="alert-desc-text">
-                                    Não há avisos emergenciais para Floraí/PR neste momento. Aproveite para se prevenir com nossas orientações no <a href="https://www.instagram.com/defesacivilflorai"> @defesacivilflorai</a>
+                    <!-- ===== CARDS DE ALERTAS ===== -->
+                    <div class="alerts-column">
+
+                        <!-- Alerta INMET -->
+                        <div id="alert-card-inmet" class="dashboard-card alert-card alert-normal">
+                            <div class="card-title">
+                                <img src="@image/icones/info.svg" alt="Ícone" class="icone"> Avisos INMET
+                            </div>
+                            <div class="alert-content-box">
+                                <div>
+                                    <div id="alert-headline-inmet" class="alert-title-text">
+                                        <img src="@image/icones/check.svg" alt="Ícone" class="icone"> 
+                                        Carregando...
+                                    </div>
+                                    <br>
+                                    <div id="alert-description-inmet" class="alert-desc-text">
+                                        Aguardando dados do INMET.
+                                    </div>
+                                    <div id="alert-period-inmet" class="alert-time-text" style="display:none;"></div>
                                 </div>
-                                <div id="alert-period" class="alert-time-text" style="display:none;"></div>
                             </div>
                         </div>
+
+                        <!-- Alerta Open-Meteo -->
+                        <div id="alert-card-openmeteo" class="dashboard-card alert-card alert-normal">
+                            <div class="card-title">
+                                <img src="@image/icones/info.svg" alt="Ícone" class="icone"> Avisos Open-Meteo
+                            </div>
+                            <div class="alert-content-box">
+                                <div>
+                                    <div id="alert-headline-openmeteo" class="alert-title-text">
+                                        <img src="@image/icones/check.svg" alt="Ícone" class="icone"> 
+                                        Carregando...
+                                    </div>
+                                    <br>
+                                    <div id="alert-description-openmeteo" class="alert-desc-text">
+                                        Aguardando dados do Open-Meteo.
+                                    </div>
+                                    <div id="alert-period-openmeteo" class="alert-time-text" style="display:none;"></div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <!-- Card dos Links Oficiais -->
+                    <!-- ===== LINKS OFICIAIS ===== -->
                     <div class="dashboard-card full">
-                        <div class="card-title"><img src="@image/icones/link.svg" alt="Ícone" class="icone"> Links de informações oficiais</div>
+                        <div class="card-title">
+                            <img src="@image/icones/link.svg" alt="Ícone" class="icone"> Links de informações oficiais
+                        </div>
                         <div class="links-grid">
                             <a href="https://www.instagram.com/defesacivilflorai/" target="_blank" rel="noopener noreferrer" class="theme-link-btn">
                                 <img src="@image/logotipos/FL.svg" alt="Ícone" class="icone-peq"> Floraí - Instagram
@@ -152,9 +238,11 @@
                         </div>
                     </div>
 
-                    <!-- Card do Mapa de Apoio -->
+                    <!-- ===== MAPA ===== -->
                     <div class="dashboard-card full">
-                        <div class="card-title"><img src="@image/icones/mapa.svg" alt="Ícone" class="icone"> Mapa de Pontos de Apoio</div>
+                        <div class="card-title">
+                            <img src="@image/icones/mapa.svg" alt="Ícone" class="icone"> Mapa de Pontos de Apoio
+                        </div>
                         <div class="map-wrapper">
                             <iframe src="https://www.google.com/maps/d/embed?mid=1QePHcw0cHKCdaEF1GNpDlZ3kb4R15qs&ehbc=2E312F&noprof=1" allowfullscreen loading="lazy"></iframe>
                         </div>
@@ -163,32 +251,21 @@
                         </div>
                     </div>
 
-                    <!-- Card de Recomendações -->
+                    <!-- ===== RECOMENDAÇÕES ===== -->
                     <div class="dashboard-card full">
-                        <div class="card-title"><img src="@image/icones/note.svg" alt="Ícone" class="icone"> Orientações de Utilidade Pública</div>
+                        <div class="card-title">
+                            <img src="@image/icones/note.svg" alt="Ícone" class="icone"> Orientações de Utilidade Pública
+                        </div>
                         <div class="instagram-grid" id="instagramGrid">
-                            <div class="insta-item">
-                                <img src="@image/icones/foto.svg" alt="Ícone" class="icone">
-                                <div class="insta-overlay">@defesacivilflorai</div>
-                            </div>
-                            <div class="insta-item">
-                                <img src="@image/icones/foto.svg" alt="Ícone" class="icone">
-                                <div class="insta-overlay">@defesacivilflorai</div>
-                            </div>
-                            <div class="insta-item">
-                                <img src="@image/icones/foto.svg" alt="Ícone" class="icone">
-                                <div class="insta-overlay">@defesacivilflorai</div>
-                            </div>
-                            <div class="insta-item">
-                                <img src="@image/icones/foto.svg" alt="Ícone" class="icone">
-                                <div class="insta-overlay">@defesacivilflorai</div>
-                            </div>
+                            <!-- Preenchido pelo JavaScript -->
                         </div>
                     </div>
 
-                    <!-- Cursos para Agentes -->
+                    <!-- ===== CURSOS ===== -->
                     <div class="dashboard-card full">
-                        <div class="card-title"><img src="@image/icones/livros.svg" alt="Ícone" class="icone"> Cursos de Capacitação</div>
+                        <div class="card-title">
+                            <img src="@image/icones/livros.svg" alt="Ícone" class="icone"> Cursos de Capacitação
+                        </div>
                         <div class="links-grid">
                             <a href="https://www.escolavirtual.gov.br/curso/885" target="_blank" rel="noopener noreferrer" class="theme-link-btn">
                                 <img src="@image/icones/prancheta.svg" alt="Ícone" class="icone-peq"> Curso de Alertas Públicos (Idap)
@@ -201,34 +278,28 @@
 
                 </div>
             </div>
+
+            <!-- ========== RODAPÉ ========== -->
             <span class="rodape">&copy; 2026 | <a href="https://ghenrique.com.br" target="_blank" rel="noopener noreferrer">Guilherme Henrique</a>
                 <br class="mobile-break"> Uso livre nos termos <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">GNU GPLv3</a>
                 <br class="mobile-break"> Código-fonte no <a href="https://github.com/thegui44/DefesaCivil.git" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <br class="mobile-break"> Versão 4
+                <br class="mobile-break"> Versão 5
             </span>
         </div>
     </div>
 
-    <!-- ===== Modais da Barra de Navegação ===== -->
+    <!-- ========== MODAIS ========== -->
 
-    <!-- Modal de Alerta -->
-    <div class="modal" id="modal-alertas">
+    <!-- Modal Previsão -->
+    <div class="modal" id="modal-previsao">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('modal-alertas')">
+            <button class="modal-close" onclick="closeModal('modal-previsao')">
                 <img src="@image/icones/close.svg" alt="Fechar" width="24" height="24">
             </button>
-            <h2 class="modal-title"><img src="@image/icones/pc.svg" alt="Ícone" class="icone"> Painel do Clima</h2>
-            <p class="modal-desc">Painel climático atual e previsão para os próximos dias</p>
-            <div style="display:flex;flex-direction:column;gap:12px;">
-                <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card-bg);border-radius:8px;">
-                    <div>
-                        <main>
-                            <div id="painel-alertas" class="painel-container">
-                                <p class="carregando"><img src="@image/icones/tempo.svg" alt="Ícone" class="icone-peq"> Buscando dados meteorológicos...</p>
-                            </div>
-                        </main>
-                    </div>
-                </div>
+            <h2 class="modal-title"><img src="@image/icones/calendario.svg" alt="Ícone" class="icone"> Previsão para os Próximos Dias</h2>
+            <p class="modal-desc">Previsão do tempo para os próximos dias em Floraí</p>
+            <div id="painel-previsao" class="painel-container">
+                <p class="carregando"><img src="@image/icones/calendario.svg" alt="Ícone" class="icone-peq"> Carregando previsão...</p>
             </div>
             <div style="margin-top:16px;padding:12px;background:rgba(250,169,84,0.1);border-radius:8px;text-align:center;font-size:0.85rem;color:var(--text-secondary);display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;">
                 <img src="@image/icones/monofone.svg" alt="Telefone" class="icone-peq"> Emergência: <strong>199</strong> | Defesa Civil: (44) 3242-8300
@@ -236,7 +307,7 @@
         </div>
     </div>
 
-    <!-- Modal de Abrigos -->
+    <!-- Modal Abrigos -->
     <div class="modal" id="modal-abrigos">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal-abrigos')">
@@ -244,15 +315,14 @@
             </button>
             <h2 class="modal-title"><img src="@image/icones/casa.svg" alt="Ícone" class="icone"> Abrigos e Pontos de Apoio</h2>
             <p class="modal-desc">Locais seguros para acolhimento em situações de emergência. Clique em cada abrigo para ver mais informações.</p>
-            <div id="abrigos-container">
-            </div>
+            <div id="abrigos-container"></div>
             <div style="margin-top:16px;padding:12px;background:rgba(250,169,84,0.1);border-radius:8px;text-align:center;font-size:0.85rem;color:var(--text-secondary);display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;">
                 <img src="@image/icones/monofone.svg" alt="Telefone" class="icone-peq"> Emergência: <strong>199</strong> | Defesa Civil: (44) 3242-8300
             </div>
         </div>
     </div>
 
-    <!-- Modal de Equipe -->
+    <!-- Modal Equipe -->
     <div class="modal" id="modal-equipe">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal-equipe')">
@@ -280,7 +350,7 @@
         </div>
     </div>
 
-    <!-- Modal de Contatos -->
+    <!-- Modal Contato -->
     <div class="modal" id="modal-contato">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal-contato')">
@@ -321,7 +391,24 @@
         </div>
     </div>
 
-    <!-- Visualizador de Imagens -->
+    <!-- Modal Outros Alertas -->
+    <div class="modal" id="modal-outros-alertas">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal-outros-alertas')">
+                <img src="@image/icones/close.svg" alt="Fechar" width="24" height="24">
+            </button>
+            <h2 class="modal-title"><img src="@image/icones/megafone.svg" alt="Ícone" class="icone"> Outros Alertas Ativos</h2>
+            <p class="modal-desc">Todos os alertas ativos para a região</p>
+            <div id="outros-alertas-container">
+                <!-- Preenchido pelo JavaScript -->
+            </div>
+            <div style="margin-top:16px;padding:12px;background:rgba(250,169,84,0.1);border-radius:8px;text-align:center;font-size:0.85rem;color:var(--text-secondary);display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;">
+                <img src="@image/icones/monofone.svg" alt="Telefone" class="icone-peq"> Emergência: <strong>199</strong> | Defesa Civil: (44) 3242-8300
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== LIGHTBOX ========== -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
         <div class="lightbox-content" onclick="event.stopPropagation()">
             <button class="lightbox-close" onclick="closeLightbox()">✕</button>
@@ -333,7 +420,7 @@
         </div>
     </div>
 
-    <script src="script.js?v=4"></script>
+    <script src="script.js?v=5"></script>
 
 </body>
 

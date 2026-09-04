@@ -1,7 +1,8 @@
-🚒 Defesa Civil - Site de Alertas e Informações - Versão 3
+🚒 Defesa Civil - Site de Alertas e Informações - Versão 5
 
-	Site institucional para a Defesa Civil municipal, com painel de clima, alertas automáticos, abrigos interativos com Street View e informações de contato.
+	Site institucional para a Defesa Civil municipal, com painel de tempo, alertas automáticos, abrigos interativos com Street View e informações de contato.
 
+	NOTA: A versão anterior, de número 4, não teve uma versão desse arquivo.
 
 📋 SOBRE O PROJETO
 
@@ -9,28 +10,38 @@
 
 		- 🌤️ Clima e previsão do tempo (dados da Open-Meteo)
 		- 🌡️ Temperaturas mínima e máxima do dia
-		- ⚠️ Alertas automáticos baseados em condições climáticas
+		- ⚠️ Alertas automáticos baseados em condições climáticas (dados do INMET e da Open-Meteo)
 		- 🏠 Abrigos interativos com visualização 3D (Google Street View)
 		- 📍 Mapa de atendimentos (Google My Maps)
 		- 📱 Postagens de orientação com Lightbox
 		- 👥 Equipe de coordenação
 
-🆕 NOVIDADES DA VERSÃO 3
+🆕 NOVIDADES DA VERSÃO 5
 
-	✅ Temperaturas mínima e máxima exibidas no card de clima
 	✅ Cards de abrigos expansíveis com visualização 3D (sem API Key)
 	✅ Sistema de abrir/fechar apenas um card por vez
 	✅ Fechamento automático dos cards ao fechar o modal
 	✅ Responsividade melhorada para títulos em dispositivos móveis
 	✅ Número de emergência padronizado em todos os modais
-	✅ Ícones SVG novos: seta-baixo, pessoas e pessoa
+	✅ Ícones SVG novos: luanova.svg, luacresc.svg, luacheia.svg, luaming.svg, nascer.svg, por-sol.svg e probabilidade.svg
+	✅ Remoção dos alertas e informações já existentes no card tempo dentro do modal de previsão 
+	✅ Criação de dois cards de alertas (redundância) na página principal, um do INMET e outro do Open-Meteo
+	✅ Melhoria do card do tempo: adição de precipitação, probabilidade de chuva, nascer e pôr do sol, fase e iluminação do disco lunar
+	✅ Descritivos mais claros da situação do céu e as abreviações Max e Min para temperaturas
+	✅ Melhoria na estrutura de adaptação do site em diferentes telas, alertas são prioritários nas telas menores
+	✅ Novo modal de alertas extras, um botão que aparece no card de alertas do INMET quando há mais de um alerta na previsão atual/futura
+	✅ Adicionados comentários diretamente no código para facilitar a localização e edição de recursos
+
 
 🛠️ TECNOLOGIAS UTILIZADAS
 
 	- HTML5 - Estrutura do site
 	- CSS3 - Estilização com suporte a tema claro/escuro
+	- PHP - Leitura e adaptação dos dados do INMET
 	- JavaScript (Vanilla) - Funcionalidades interativas
 	- Open-Meteo API - Dados climáticos em tempo real
+	- RSS INMET - Dados nacionais de avisos e alertas
+	- WeatherAPI - Dados de fase e de iluminação do disco lunar
 	- Google My Maps - Mapa de abrigos
 	- Google Street View - Visualização 3D dos abrigos (sem API Key)
 
@@ -42,12 +53,13 @@
 	├── style.css         	  # Estilos (com tema claro/escuro)
 	├── script.js         	  # Lógica do site (API, modais, tema)
 	├── comfortaa.woff2   	  # Fonte do site (opcional)
+	├── inmet.php       	  # Arquivo para obter dados do RSS do NIMET
 	├── 📁 @image/        	  # Imagens do site
 	│   ├── 📁 icones/    	  # Ícones SVG
 	│   ├── 📁 logotipos/ 	  # Logotipos (defciv.svg, florai.png, etc)
 	│   └── 📁 perfil/   	  # Imagens de perfil da equipe da defesa civil
 	│   └── 📁 posts/   	  # Imagens do Instagram (1.jpg, 2.jpg, etc)
-	└── README.md            # Este arquivo
+	└── README.md         	   # Este arquivo
 
 	Obs.: As páginas index.html dentro de outras pastas, servem apenas para 
 	redirecionar o acesso para a página principal
@@ -175,13 +187,18 @@
 				@image/posts/1.jpg a 4.jpg 		Instagram Grid 			Postagens de orientação
 				@image/wallpaper.jpg 			Fundo 					Imagem de fundo do site
 
-			Certifique-se de criar ou baixar os seguintes ícones SVG:
+			Certifique-se de criar ou baixar os seguintes ícones SVG na pasta `@image/icones`:
 
 				Arquivo 						Onde é usado			Descrição
  
-				seta-baixo.svg					Seta para baixo			Toggle dos cards de abrigo
-				pessoas.svg						Grupo de pessoas		Capacidade dos abrigos
-				pessoa.svg						Mãos de ajuda			Responsável do abrigo
+				luanova.svg						Lua Nova				Círculo completamente escuro
+				luacresc.svg					Lua Crescente			Crescente fino (lado direito iluminado)
+				luacheia.svg					Lua Cheia				Círculo completamente iluminado
+				luaming.svg						Lua Minguante			Crescente fino (lado esquerdo iluminado)
+				nascer.svg						Nascer do sol			Nascer do sol 
+				por-sol.svg						Pôr do sol				Pôr do sol 
+				probabilidade.svg				Guarda-chuva			Probabilidade de chuva 
+
 
 
 	4️⃣ ATUALIZAR MAPA (index.html)
@@ -215,18 +232,18 @@
 
 		css
 		:root {
-		    / Tema claro /
-		    --dc-orange: #FAA954;      / Cor principal da Defesa Civil /
+		    /* Tema claro */
+		    --dc-orange: #FAA954;      /* Cor principal da Defesa Civil */
 		    --bg-glass: rgba(254, 254, 254, 0.92);
 		    --text-primary: #2C2420;
-		    / ... /
+		    /* ... */
 		}
 
 		[data-theme="dark"] {
-		    / Tema escuro /
+		    /* Tema escuro */
 		    --bg-glass: rgba(30, 28, 40, 0.92);
 		    --text-primary: #F0ECE8;
-		    / ... /
+		    /* ... */
 		}
 
 
