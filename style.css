@@ -1941,3 +1941,52 @@ p, h3, span {
     opacity: 1;
     transform: scale(1.02);
 }
+
+/* ============================================
+   AJUSTES PARA BOTÃO DE ALERTAS EM MOBILE
+   ============================================ */
+
+/* Esconde "alerta(s)" e "futuro" em mobile, mantém apenas o número */
+@media (max-width: 768px) {
+    .btn-outros-alertas {
+        font-size: 0.55rem !important;
+        padding: 1px 8px !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0 !important;
+        min-width: auto !important;
+    }
+
+    /* Esconde o texto "alerta" e "alerta(s)" */
+    .btn-outros-alertas .texto-alerta {
+        display: none !important;
+    }
+
+    /* Esconde a palavra "futuro" */
+    .btn-outros-alertas .texto-futuro {
+        display: none !important;
+    }
+
+    /* Mantém apenas o número com um ícone ou "+" */
+    .btn-outros-alertas .numero {
+        display: inline !important;
+    }
+
+    /* Adiciona um "+" antes do número via CSS */
+    .btn-outros-alertas .numero::before {
+        content: "+";
+        display: inline;
+    }
+}
+
+/* Para telas muito pequenas (480px) */
+@media (max-width: 480px) {
+    .btn-outros-alertas {
+        font-size: 0.45rem !important;
+        padding: 0px 6px !important;
+        border-radius: 6px !important;
+    }
+}

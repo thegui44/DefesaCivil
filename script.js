@@ -123,7 +123,7 @@ document.addEventListener('click', (e) => {
 });
 
 // ================================================================
-// 4. OUTROS ALERTAS - ABRIR MODAL
+// 4. OUTROS ALERTAS INMET - ABRIR MODAL
 // ================================================================
 
 function abrirOutrosAlertas() {
@@ -133,13 +133,28 @@ function abrirOutrosAlertas() {
     const outros = window.outrosAlertas || [];
     
     if (outros.length === 0) {
-        container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:20px;">Nenhum outro alerta ativo no momento.</p>';
+        container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:20px;">Nenhum outro alerta ativo ou futuro no momento.</p>';
         openModal('modal-outros-alertas');
         return;
     }
     
     let html = '';
-    outros.forEach((alerta, index) => {
+    // Separar ativos e futuros
+    const ativos = outros.filter(a => a.status === 'ativo');
+    const futuros = outros.filter(a => a.status === 'futuro');
+    
+    // Ordenar ativos por peso (maior primeiro)
+    ativos.sort((a, b) => b.peso - a.peso);
+    // Ordenar futuros por data de início (mais próximo primeiro)
+    futuros.sort((a, b) => {
+        if (a.inicio && b.inicio) {
+            return new Date(a.inicio) - new Date(b.inicio);
+        }
+        return 0;
+    });
+    
+    // Função para renderizar um alerta
+    function renderAlerta(alerta, index, tipo) {
         let cor = '#f1c40f'; // Amarelo padrão
         if (alerta.peso === 3) cor = '#e74c3c'; // Vermelho
         else if (alerta.peso === 2) cor = '#e67e22'; // Laranja
@@ -158,9 +173,9 @@ function abrirOutrosAlertas() {
             dataTexto = `<img src="@image/icones/calendario.svg" alt="Calendário" class="icone-peq"> Fim: ${fimFormatado}`;
         }
         
-        html += `
+        return `
             <div style="background:var(--card-bg);border-left:4px solid ${cor};border-radius:6px;padding:14px 16px;margin-bottom:10px;">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;">
                     <span style="font-weight:bold;color:var(--text-primary);">${alerta.titulo}</span>
                     <span style="font-size:0.65rem;background:${cor};color:#fff;padding:2px 10px;border-radius:10px;">${alerta.severidade}</span>
                     <span style="font-size:0.6rem;color:var(--text-secondary);margin-left:auto;">#${index + 1}</span>
@@ -169,6 +184,87 @@ function abrirOutrosAlertas() {
                 ${dataTexto ? `<div style="font-size:0.7rem;color:var(--text-secondary);margin-top:4px;opacity:0.7;">${dataTexto}</div>` : ''}
             </div>
         `;
+    }
+    
+    // Renderizar ativos primeiro
+    if (ativos.length > 0) {
+        html += `<div style="margin-bottom:12px;font-weight:bold;color:var(--text-primary);font-size:0.9rem;">Alertas Ativos (${ativos.length})</div>`;
+        ativos.forEach((alerta, index) => {
+            html += renderAlerta(alerta, index, 'ativo');
+        });
+    }
+    
+    // Depois renderizar futuros
+    if (futuros.length > 0) {
+        html += `<div style="margin-bottom:12px;margin-top:8px;font-weight:bold;color:var(--text-primary);font-size:0.9rem;">Alertas Futuros (${futuros.length})</div>`;
+        futuros.forEach((alerta, index) => {
+            html += renderAlerta(alerta, index, 'futuro');
+        });
+    }
+    
+    container.innerHTML = html;
+    openModal('modal-outros-alertas');
+}
+
+// ================================================================
+// 4.1 OUTROS ALERTAS OPEN-METEO - ABRIR MODAL
+// ================================================================
+
+function abrirOutrosAlertasOpenMeteo() {
+    const container = document.getElementById('outros-alertas-container');
+    if (!container) return;
+    
+    const outros = window.outrosAlertasOpenMeteo || [];
+    
+    if (outros.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:20px;">Nenhum alerta futuro do Open-Meteo no momento.</p>';
+        openModal('modal-outros-alertas');
+        return;
+    }
+    
+    let html = '';
+    
+    // Função para renderizar um alerta
+    function renderAlerta(alerta, index) {
+        let cor = '#f1c40f'; // Amarelo padrão
+        if (alerta.peso === 3 || alerta.level === 'danger') cor = '#e74c3c'; // Vermelho
+        else if (alerta.peso === 2 || alerta.level === 'warning') cor = '#e67e22'; // Laranja
+        else cor = '#3498db'; // Azul para futuros
+        
+        // Converte data para formato brasileiro
+        let dataTexto = '';
+        if (alerta.inicio && alerta.fim) {
+            const inicioFormatado = alerta.inicio.replace(/(\d{4})-(\d{2})-(\d{2}) \d{2}:\d{2}.*/, '$3/$2/$1');
+            const fimFormatado = alerta.fim.replace(/(\d{4})-(\d{2})-(\d{2}) \d{2}:\d{2}.*/, '$3/$2/$1');
+            dataTexto = `<img src="@image/icones/calendario.svg" alt="Calendário" class="icone-peq"> ${inicioFormatado} até ${fimFormatado}`;
+        } else if (alerta.inicio) {
+            const inicioFormatado = alerta.inicio.replace(/(\d{4})-(\d{2})-(\d{2}) \d{2}:\d{2}.*/, '$3/$2/$1');
+            dataTexto = `<img src="@image/icones/calendario.svg" alt="Calendário" class="icone-peq"> Início: ${inicioFormatado}`;
+        } else if (alerta.fim) {
+            const fimFormatado = alerta.fim.replace(/(\d{4})-(\d{2})-(\d{2}) \d{2}:\d{2}.*/, '$3/$2/$1');
+            dataTexto = `<img src="@image/icones/calendario.svg" alt="Calendário" class="icone-peq"> Fim: ${fimFormatado}`;
+        }
+        
+        const titulo = alerta.event || alerta.titulo || 'Alerta';
+        const descricao = alerta.description || alerta.descricao || 'Sem descrição';
+        const severidade = alerta.severidade || 'Perigo Potencial';
+        
+        return `
+            <div style="background:var(--card-bg);border-left:4px solid ${cor};border-radius:6px;padding:14px 16px;margin-bottom:10px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;">
+                    <span style="font-weight:bold;color:var(--text-primary);">${titulo}</span>
+                    <span style="font-size:0.65rem;background:${cor};color:#fff;padding:2px 10px;border-radius:10px;">${severidade}</span>
+                    <span style="font-size:0.6rem;color:var(--text-secondary);margin-left:auto;">#${index + 1}</span>
+                </div>
+                <div style="font-size:0.8rem;color:var(--text-secondary);">${descricao}</div>
+                ${dataTexto ? `<div style="font-size:0.7rem;color:var(--text-secondary);margin-top:4px;opacity:0.7;">${dataTexto}</div>` : ''}
+            </div>
+        `;
+    }
+    
+    html += `<div style="margin-bottom:12px;font-weight:bold;color:var(--text-primary);font-size:0.9rem;">Alertas Futuros Open-Meteo (${outros.length})</div>`;
+    outros.forEach((alerta, index) => {
+        html += renderAlerta(alerta, index);
     });
     
     container.innerHTML = html;
@@ -725,8 +821,8 @@ function processarDadosClima(data) {
     
     // Atualiza lua e alertas
     atualizarFaseLua();
-    const alerts = gerarAlertasOpenMeteo(current, daily);
-    atualizarAlertasOpenMeteo(alerts, weatherInfo);
+    const alertas = gerarAlertasOpenMeteo(current, daily);
+    atualizarAlertasOpenMeteo(alertas);
     atualizarModalPrevisao(daily);
 }
 
@@ -776,13 +872,21 @@ function mostrarErroClima(mensagem) {
 
 function gerarAlertasOpenMeteo(current, daily) {
     const alerts = [];
+    const alertasFuturos = [];
     const windSpeed = current.wind_speed_10m || 0;
     const windGusts = current.wind_gusts_10m || 0;
     const weatherCode = current.weather_code || 0;
     const precipitation = current.precipitation || 0;
     const rain = current.rain || 0;
     const showers = current.showers || 0;
-    const anoAtual = new Date().getFullYear(); // Adiciona o ano atual
+    
+    // Obtém a data atual (hoje) para comparar
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    
+    // ============================================
+    // ALERTAS BASEADOS NO CLIMA ATUAL (HOJE) - SEMPRE ATIVOS
+    // ============================================
     
     if (windSpeed > 50 || windGusts > 70) {
         alerts.push({
@@ -791,7 +895,9 @@ function gerarAlertasOpenMeteo(current, daily) {
             severity: 'Perigo',
             level: 'warning',
             emoji: 'tornado.svg',
-            period: 'Evite áreas abertas'
+            period: 'Evite áreas abertas',
+            status: 'ativo',
+            peso: 2
         });
     }
     
@@ -802,7 +908,9 @@ function gerarAlertasOpenMeteo(current, daily) {
             severity: 'Grande Perigo',
             level: 'danger',
             emoji: 'tempestade.svg',
-            period: 'Busque abrigo seguro'
+            period: 'Busque abrigo seguro',
+            status: 'ativo',
+            peso: 3
         });
     }
     
@@ -813,51 +921,100 @@ function gerarAlertasOpenMeteo(current, daily) {
             severity: 'Perigo Potencial',
             level: 'warning',
             emoji: 'chuva.svg',
-            period: 'Redobre a atenção'
+            period: 'Redobre a atenção',
+            status: 'ativo',
+            peso: 2
         });
     }
     
+    // ============================================
+    // ALERTAS DE PREVISÃO - SEPARA ATIVOS (HOJE) E FUTUROS
+    // ============================================
     if (daily.time) {
         for (let i = 0; i < Math.min(daily.time.length, 3); i++) {
+            const dataAlerta = new Date(daily.time[i] + 'T00:00:00');
+            const dataAlertaStr = dataAlerta.toDateString();
+            const hojeStr = hoje.toDateString();
+            
             const dayPrecip = daily.precipitation_sum?.[i] || 0;
             const dayProb = daily.precipitation_probability_max?.[i] || 0;
             const dayWind = daily.wind_speed_10m_max?.[i] || 0;
             const dayDate = daily.time[i] || '';
             
-            if (dayPrecip > 20 && dayProb > 70) {
+            // Se for HOJE - adiciona como ativo
+            if (dataAlertaStr === hojeStr) {
+                if (dayPrecip > 20 && dayProb > 70) {
+                    alerts.push({
+                        event: 'CHUVA FORTE HOJE',
+                        description: `Previsão de chuva forte para hoje com ${Math.round(dayProb)}% de probabilidade e ${Math.round(dayPrecip)}mm.`,
+                        severity: 'Perigo Potencial',
+                        level: 'warning',
+                        emoji: 'chuva.svg',
+                        period: 'Redobre a atenção hoje',
+                        status: 'ativo',
+                        peso: 2
+                    });
+                }
+                
+                if (dayWind > 60) {
+                    alerts.push({
+                        event: 'VENTOS FORTES HOJE',
+                        description: `Ventos de até ${Math.round(dayWind)} km/h previstos para hoje.`,
+                        severity: 'Perigo Potencial',
+                        level: 'warning',
+                        emoji: 'tornado.svg',
+                        period: 'Fique atento hoje',
+                        status: 'ativo',
+                        peso: 2
+                    });
+                }
+            } else {
+                // É FUTURO - adiciona na lista de futuros
                 const date = new Date(dayDate + 'T00:00:00');
                 const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-                alerts.push({
-                    event: 'PREVISÃO DE CHUVA FORTE',
-                    description: `Previsão de chuva forte para ${dateStr} com ${Math.round(dayProb)}% de probabilidade e ${Math.round(dayPrecip)}mm.`,
-                    severity: 'Perigo Potencial',
-                    level: 'warning',
-                    emoji: 'calendario.svg',
-                    period: `Fique atento para ${dateStr}/${anoAtual}`  // ← Adiciona o ano
-                });
-                break;
-            }
-            
-            if (dayWind > 60) {
-                const date = new Date(dayDate + 'T00:00:00');
-                const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-                alerts.push({
-                    event: 'VENTOS FORTES PREVISTOS',
-                    description: `Ventos de até ${Math.round(dayWind)} km/h previstos para ${dateStr}.`,
-                    severity: 'Perigo Potencial',
-                    level: 'warning',
-                    emoji: 'calendario.svg',
-                    period: `Fique atento para ${dateStr}/${anoAtual}`  // ← Adiciona o ano
-                });
-                break;
+                const anoAtual = new Date().getFullYear();
+                
+                if (dayPrecip > 20 && dayProb > 70) {
+                    alertasFuturos.push({
+                        event: 'PREVISÃO DE CHUVA FORTE',
+                        description: `Previsão de chuva forte para ${dateStr} com ${Math.round(dayProb)}% de probabilidade e ${Math.round(dayPrecip)}mm.`,
+                        severity: 'Perigo Potencial',
+                        level: 'warning',
+                        emoji: 'calendario.svg',
+                        period: `Fique atento para ${dateStr}/${anoAtual}`,
+                        inicio: daily.time[i] + ' 00:00:00',
+                        fim: daily.time[i] + ' 23:59:00',
+                        status: 'futuro',
+                        peso: 2
+                    });
+                }
+                
+                if (dayWind > 60) {
+                    alertasFuturos.push({
+                        event: 'VENTOS FORTES PREVISTOS',
+                        description: `Ventos de até ${Math.round(dayWind)} km/h previstos para ${dateStr}.`,
+                        severity: 'Perigo Potencial',
+                        level: 'warning',
+                        emoji: 'calendario.svg',
+                        period: `Fique atento para ${dateStr}/${anoAtual}`,
+                        inicio: daily.time[i] + ' 00:00:00',
+                        fim: daily.time[i] + ' 23:59:00',
+                        status: 'futuro',
+                        peso: 2
+                    });
+                }
             }
         }
     }
     
-    return alerts.slice(0, 3);
+    // Retorna objeto com ativos e futuros separados
+    return {
+        ativos: alerts.slice(0, 3),
+        futuros: alertasFuturos
+    };
 }
 
-function atualizarAlertasOpenMeteo(alerts, weatherInfo) {
+function atualizarAlertasOpenMeteo(alertas) {
     const alertCard = document.getElementById('alert-card-openmeteo');
     const alertHeadline = document.getElementById('alert-headline-openmeteo');
     const alertDescription = document.getElementById('alert-description-openmeteo');
@@ -865,8 +1022,15 @@ function atualizarAlertasOpenMeteo(alerts, weatherInfo) {
 
     if (!alertCard || !alertHeadline || !alertDescription) return;
 
-    if (alerts && alerts.length > 0) {
-        const alerta = alerts[0];
+    const ativos = alertas.ativos || [];
+    const futuros = alertas.futuros || [];
+
+    // Salva os futuros do Open-Meteo
+    window.outrosAlertasOpenMeteo = futuros;
+
+    // Se tem alertas ativos, mostra o primeiro
+    if (ativos.length > 0) {
+        const alerta = ativos[0];
         let levelClass = 'alert-normal';
         let iconPath = '@image/icones/check.svg';
         
@@ -885,15 +1049,20 @@ function atualizarAlertasOpenMeteo(alerts, weatherInfo) {
                 break;
         }
         
-         alertCard.className = `dashboard-card alert-card ${levelClass}`;
+        alertCard.className = `dashboard-card alert-card ${levelClass}`;
         
-        // Estrutura unificada: Título com ícone + Severidade + Descrição
+        // Título com ícone e botão de futuros se houver
+        let botaoFuturos = '';
+        if (futuros.length > 0) {
+            botaoFuturos = `<span class="btn-outros-alertas" onclick="abrirOutrosAlertasOpenMeteo()">+${futuros.length} futuro</span>`;
+        }
+        
         alertHeadline.innerHTML = `
             <span class="alert-title-text">
                 <img src="${iconPath}" alt="${alerta.event}" class="alert-icon"> 
                 ${alerta.event}
+                ${botaoFuturos}
             </span>
-            <span class="alert-severity-text">${alerta.severity}</span>
         `;
         
         alertDescription.innerHTML = alerta.description;
@@ -906,19 +1075,36 @@ function atualizarAlertasOpenMeteo(alerts, weatherInfo) {
                 alertPeriod.style.display = 'none';
             }
         }
-    } else {
+    } else if (futuros.length > 0) {
+        // Não tem ativos, mas tem futuros
         alertCard.className = 'dashboard-card alert-card alert-normal';
         alertHeadline.innerHTML = `
             <span class="alert-title-text">
                 <img src="@image/icones/vento.svg" alt="Informação" class="alert-icon"> 
-                Sem Alertas Ativos
+                SEM ALERTAS
+                <span class="btn-outros-alertas" onclick="abrirOutrosAlertasOpenMeteo()">+${futuros.length} futuro${futuros.length > 1 ? 's' : ''}</span>
+            </span>
+        `;
+        alertDescription.innerHTML = `
+            Não há avisos ativos pelo Open-Meteo para o momento.
+            <br><small style="opacity:0.6;">Clique em "+${futuros.length} futuro${futuros.length > 1 ? 's' : ''}" para ver o${futuros.length > 1 ? 's' : ''} próximo${futuros.length > 1 ? 's' : ''}.</small>
+        `;
+        if (alertPeriod) alertPeriod.style.display = 'none';
+    } else {
+        // Não tem nada
+        alertCard.className = 'dashboard-card alert-card alert-normal';
+        alertHeadline.innerHTML = `
+            <span class="alert-title-text">
+                <img src="@image/icones/vento.svg" alt="Informação" class="alert-icon"> 
+                SEM ALERTAS
             </span>
         `;
         alertDescription.innerHTML = `
             Não há avisos disponíveis pela Open-Meteo no momento.
-            <br><small style="opacity:0.6;">Dados atualizados automaticamente a cada 5 minutos.</small>
+            <br><small style="opacity:0.6;">Dados atualizados automaticamente.</small>
         `;
         if (alertPeriod) alertPeriod.style.display = 'none';
+        window.outrosAlertasOpenMeteo = [];
     }
 }
 
@@ -988,7 +1174,7 @@ async function fetchInmetAlerts() {
         if (data.status === 'alerta') {
             atualizarAlertaINMET(data);
         } else {
-            atualizarAlertaINMET(null);
+            atualizarAlertaINMET(data);
         }
     } catch (error) {
         console.error('Erro ao buscar alertas INMET:', error);
@@ -1004,10 +1190,32 @@ function atualizarAlertaINMET(data) {
     
     if (!alertCard || !alertHeadline || !alertDescription) return;
 
+    // Verifica se há alertas futuros mesmo quando status é 'normal'
+    if (data && data.futuros && data.futuros.length > 0) {
+        // Tem alertas futuros - mostra "SEM ALERTAS" mas com botão
+        const futuros = data.futuros;
+        window.outrosAlertas = futuros.map(a => ({ ...a, status: 'futuro' }));
+        
+        alertCard.className = 'dashboard-card alert-card alert-normal';
+        alertHeadline.innerHTML = `
+            <span class="alert-title-text">
+                <img src="@image/icones/vento.svg" alt="Informação" class="alert-icon"> 
+                SEM ALERTAS
+                <span class="btn-outros-alertas" onclick="abrirOutrosAlertas()">+${futuros.length} futuro${futuros.length > 1 ? 's' : ''}</span>
+            </span>
+        `;
+        alertDescription.innerHTML = `
+            Não há avisos ativos pelo INMET para o momento.
+            <br><small style="opacity:0.6;">Clique em "+${futuros.length} futuro${futuros.length > 1 ? 's' : ''}" para ver o${futuros.length > 1 ? 's' : ''} próximo${futuros.length > 1 ? 's' : ''}.</small>
+        `;
+        if (alertPeriod) alertPeriod.style.display = 'none';
+        return;
+    }
+
     if (data && data.status === 'alerta') {
         const principal = data.principal;
         const outros = data.outros || [];
-        
+
         let levelClass = 'alert-normal';
         let emojiPath = '@image/icones/check.svg';
         
@@ -1024,19 +1232,17 @@ function atualizarAlertaINMET(data) {
         
         alertCard.className = `dashboard-card alert-card ${levelClass}`;
         
-        // Título com ícone, texto e botão "outros alertas" ao lado
         let tituloHtml = `
             <span class="alert-title-text">
                 <img src="${emojiPath}" alt="${principal.severidade}" class="alert-icon"> 
                 ${principal.titulo}
-                ${outros.length > 0 ? `<span class="btn-outros-alertas" onclick="abrirOutrosAlertas()">+${outros.length} alerta${outros.length > 1 ? 's' : ''} ativo</span>` : ''}
+                ${outros.length > 0 ? `<span class="btn-outros-alertas" onclick="abrirOutrosAlertas()">+${outros.length} alerta${outros.length > 1 ? 's' : ''}</span>` : ''}
             </span>
         `;
 
         alertHeadline.innerHTML = tituloHtml;
         alertDescription.innerHTML = `<strong>${principal.severidade}</strong><br>${principal.descricao}`;
         
-        // Período no formato brasileiro
         let periodText = '';
         if (principal.inicio && principal.fim) {
             const inicioFormatado = principal.inicio.replace(/(\d{4})-(\d{2})-(\d{2}) \d{2}:\d{2}.*/, '$3/$2/$1');
@@ -1059,7 +1265,7 @@ function atualizarAlertaINMET(data) {
             }
         }
         
-        window.outrosAlertas = outros;
+        window.outrosAlertas = outros.map(a => ({ ...a, status: 'ativo' }));
         
     } else if (data === null) {
         alertCard.className = 'dashboard-card alert-card alert-normal';
@@ -1080,12 +1286,12 @@ function atualizarAlertaINMET(data) {
         alertHeadline.innerHTML = `
             <span class="alert-title-text">
                 <img src="@image/icones/vento.svg" alt="Informação" class="alert-icon"> 
-                Sem Alertas Ativos
+                SEM ALERTAS
             </span>
         `;
         alertDescription.innerHTML = `
             Não há avisos disponíveis pelo INMET no momento.
-            <br><small style="opacity:0.6;">Dados atualizados automaticamente a cada 5 minutos.</small>
+            <br><small style="opacity:0.6;">Dados atualizados automaticamente.</small>
         `;
         if (alertPeriod) alertPeriod.style.display = 'none';
         window.outrosAlertas = [];

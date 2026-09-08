@@ -62,7 +62,11 @@ function extrairValor($html, $label) {
 // ============================================
 function parseDataRSS($dataStr) {
     if (empty($dataStr)) return false;
+    
+    // Remove .0 do final
     $dataStr = preg_replace('/\.0$/', '', $dataStr);
+    $dataStr = trim($dataStr);
+    
     $formatos = ['Y-m-d H:i:s', 'Y-m-d H:i', 'Y-m-d'];
     foreach ($formatos as $formato) {
         $data = DateTime::createFromFormat($formato, $dataStr);
@@ -77,24 +81,26 @@ function parseDataRSS($dataStr) {
 // FUNÇÃO PARA CLASSIFICAR ALERTA
 // ============================================
 function classificarAlerta($inicio, $fim, $dataAtual) {
+    // Se não tem datas, considera ativo
     if (empty($inicio) && empty($fim)) {
-        return 'ativo'; // Sem data, considera ativo
+        return 'ativo';
     }
     
     $dataInicio = parseDataRSS($inicio);
     $dataFim = parseDataRSS($fim);
     
-    // Verifica se já expirou (tem data de fim)
+    // CASO 1: Tem data de fim e já passou
     if ($dataFim !== false && $dataFim < $dataAtual) {
-        return 'expirado'; // Já passou
+        return 'expirado';
     }
     
-    // Verifica se ainda não começou (tem data de início)
+    // CASO 2: Tem data de início e ainda não começou
     if ($dataInicio !== false && $dataInicio > $dataAtual) {
-        return 'futuro'; // Ainda vai começar
+        return 'futuro';
     }
     
-    return 'ativo'; // Está em andamento
+    // CASO 3: Está em andamento
+    return 'ativo';
 }
 
 // ============================================
@@ -168,21 +174,23 @@ foreach ($xml->channel->item as $item) {
 }
 
 // ============================================
-// ORDENAÇÃO: POR DATA (mais recente primeiro)
+// ORDENAÇÃO: POR DATA (mais próxima primeiro)
 // ============================================
 function ordenarPorData($a, $b) {
     $dataA = parseDataRSS($a['inicio']);
     $dataB = parseDataRSS($b['inicio']);
+    
     if ($dataA && $dataB) {
-        $diff = $dataB->getTimestamp() - $dataA->getTimestamp();
+        $diff = $dataA->getTimestamp() - $dataB->getTimestamp();
         if ($diff != 0) {
             return $diff;
         }
     }
-    // Se mesma data, ordena por peso (maior primeiro)
+    
     if ($a['peso'] != $b['peso']) {
         return $b['peso'] - $a['peso'];
     }
+    
     return 0;
 }
 
@@ -192,12 +200,12 @@ usort($alertasFuturos, 'ordenarPorData');
 // ============================================
 // RETORNA TODOS OS ALERTAS
 // ============================================
-if (count($alertasAtivos) > 0 || count($alertasFuturos) > 0) {
-    // Prioridade: alertas ativos primeiro
+// SÓ MOSTRA ALERTA PRINCIPAL SE HOUVER ALERTAS ATIVOS
+// Se só houver futuros, mostra "Sem Alertas Ativos" mas mantém os futuros no modal
+if (count($alertasAtivos) > 0) {
+    // Tem alertas ativos - exibe normalmente
     $todosAlertas = array_merge($alertasAtivos, $alertasFuturos);
     $alertaPrincipal = $todosAlertas[0];
-    
-    // Outros alertas são todos exceto o principal
     $outrosAlertas = array_slice($todosAlertas, 1);
     
     $level = 'warning';
@@ -240,6 +248,26 @@ if (count($alertasAtivos) > 0 || count($alertasFuturos) > 0) {
             'peso' => $alertaPrincipal['peso']
         ],
         'outros' => $outrosFormatados
+    ]);
+} else if (count($alertasFuturos) > 0) {
+    // Só tem alertas futuros - NÃO mostra principal
+    // Retorna status 'normal' mas com os futuros para serem exibidos no modal
+    $outrosFormatados = [];
+    foreach ($alertasFuturos as $alerta) {
+        $outrosFormatados[] = [
+            'titulo' => $alerta['titulo'],
+            'descricao' => $alerta['descricao'],
+            'severidade' => $alerta['severidade'],
+            'inicio' => $alerta['inicio'],
+            'fim' => $alerta['fim'],
+            'peso' => $alerta['peso']
+        ];
+    }
+    
+    echo json_encode([
+        'status' => 'normal',
+        'message' => 'Não há avisos emergenciais para o Noroeste Paranaense neste momento.',
+        'futuros' => $outrosFormatados
     ]);
 } else {
     echo json_encode(['status' => 'normal', 'message' => 'Não há avisos emergenciais para o Noroeste Paranaense neste momento.']);
