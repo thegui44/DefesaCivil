@@ -106,6 +106,7 @@
     --overlay: var(--overlay-color);
     --hover-bg: rgba(250, 169, 84, 0.15);
     --hover-text: #FAA954;
+    --hover-avisos: #00af0f;
 }
 
 [data-theme="light"] {
@@ -124,6 +125,7 @@
     --overlay: var(--overlay-color);
     --hover-bg: #FAA954;
     --hover-text: #000000;
+    --hover-avisos: #07580e;
 }
 
 /* ============================================
