@@ -37,6 +37,7 @@ if ($xml === false) {
 
 $alertasAtivos = [];
 $alertasFuturos = [];
+$alertasJaAdicionados = []; // ← Armazena alertas já incluídos (para deduplicação)
 $dataAtual = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
 
 // ============================================
@@ -104,6 +105,70 @@ function classificarAlerta($inicio, $fim, $dataAtual) {
 }
 
 // ============================================
+// FUNÇÃO PARA VERIFICAR SOBREPOSIÇÃO DE PERÍODO
+// ============================================
+/**
+ * Verifica se o alerta atual é duplicata de algum já adicionado.
+ * Dois alertas são considerados duplicados quando:
+ *   - Título (evento) é igual (case-insensitive)
+ *   - Severidade é igual (case-insensitive)
+ *   - Os períodos se sobrepõem (ou são idênticos)
+ * 
+ * @param string $titulo      Título do alerta atual
+ * @param string $severidade  Severidade do alerta atual
+ * @param string $inicio      Data de início (string) do alerta atual
+ * @param string $fim         Data de fim (string) do alerta atual
+ * @param array  $jaAdicionados Array de alertas já adicionados
+ * @return bool               true se for duplicata, false caso contrário
+ */
+function ehAlertaDuplicado($titulo, $severidade, $inicio, $fim, $jaAdicionados) {
+    $dataInicio = parseDataRSS($inicio);
+    $dataFim = parseDataRSS($fim);
+    
+    foreach ($jaAdicionados as $alertaExistente) {
+        // Compara título (case-insensitive)
+        $mesmoTitulo = strcasecmp(
+            trim($alertaExistente['titulo']), 
+            trim($titulo)
+        ) === 0;
+        
+        if (!$mesmoTitulo) continue;
+        
+        // Compara severidade (case-insensitive)
+        $mesmaSeveridade = strcasecmp(
+            trim($alertaExistente['severidade']), 
+            trim($severidade)
+        ) === 0;
+        
+        if (!$mesmaSeveridade) continue;
+        
+        $inicioExistente = parseDataRSS($alertaExistente['inicio']);
+        $fimExistente = parseDataRSS($alertaExistente['fim']);
+        
+        // CASO 1: Ambos têm período completo → verifica sobreposição
+        if ($dataInicio && $dataFim && $inicioExistente && $fimExistente) {
+            // Sobreposição: início de um <= fim do outro E fim de um >= início do outro
+            $sobrepoe = ($dataInicio <= $fimExistente) && ($dataFim >= $inicioExistente);
+            
+            if ($sobrepoe) {
+                return true;
+            }
+        }
+        // CASO 2: Ambos sem período → considera duplicata
+        elseif (!$dataInicio && !$dataFim && !$inicioExistente && !$fimExistente) {
+            return true;
+        }
+        // CASO 3: Um tem período, o outro não → considera duplicata
+        // (mesmo título + mesma severidade, um sem data = mesma ocorrência)
+        elseif ((!$dataInicio && !$dataFim) || (!$inicioExistente && !$fimExistente)) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+// ============================================
 // PERCORRE TODOS OS ALERTAS
 // ============================================
 foreach ($xml->channel->item as $item) {
@@ -145,6 +210,23 @@ foreach ($xml->channel->item as $item) {
         if ($status === 'expirado') {
             continue;
         }
+        
+        // ============================================
+        // DEDUPLICAÇÃO POR SOBREPOSIÇÃO DE PERÍODO
+        // ============================================
+        // Se já existe um alerta com mesmo título + severidade
+        // cujo período se sobrepõe ao atual, pula este.
+        if (ehAlertaDuplicado($evento, $severidade, $inicio, $fim, $alertasJaAdicionados)) {
+            continue;
+        }
+        
+        // Registra este alerta como já adicionado
+        $alertasJaAdicionados[] = [
+            'titulo' => $evento,
+            'severidade' => $severidade,
+            'inicio' => $inicio,
+            'fim' => $fim
+        ];
         
         // Calcula peso
         $peso = 1;
@@ -230,7 +312,8 @@ if (count($alertasAtivos) > 0) {
             'severidade' => $alerta['severidade'],
             'inicio' => $alerta['inicio'],
             'fim' => $alerta['fim'],
-            'peso' => $alerta['peso']
+            'peso' => $alerta['peso'],
+            'status' => $alerta['status']
         ];
     }
     

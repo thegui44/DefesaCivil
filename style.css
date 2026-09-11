@@ -342,11 +342,11 @@ p, h3, span {
     margin-top: 20px;
 }
 
-/* Colunas */
 .weather-column {
     grid-column: 1 / 2;
     display: flex;
     align-items: stretch;
+    width: 100%;
 }
 
 .alerts-column {
@@ -356,7 +356,6 @@ p, h3, span {
     gap: 20px;
 }
 
-/* Cards */
 .dashboard-card {
     background: var(--card-bg);
     border-radius: 10px;
@@ -386,33 +385,35 @@ p, h3, span {
     gap: 8px;
 }
 
+.weather-column .dashboard-card {
+    width: 100%;
+    flex: 1;
+}
+
 /* ============================================
    CARD DO TEMPO
    ============================================ */
 
-/* Container principal do card do tempo */
 .dashboard-card.weather-card {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-/* Título do card - sempre no topo */
 .dashboard-card.weather-card .weather-card-title {
     flex-shrink: 0;
     margin-bottom: 12px;
 }
 
-/* Grid do conteúdo - centralizado verticalmente */
 .dashboard-card.weather-card .weather-grid {
     display: grid;
-    grid-template-columns: 1.2fr 2fr;
-    gap: 20px 30px;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 10px 20px;
     align-items: center;
     flex: 1;
+    width: 100%;
 }
 
-/* Rodapé do card - sempre embaixo e centralizado */
 .dashboard-card.weather-card .weather-update {
     flex-shrink: 0;
     margin-top: auto;
@@ -531,8 +532,7 @@ p, h3, span {
     width: 18px;
     height: 18px;
     flex-shrink: 0;
-    
-     filter: drop-shadow(2px 2px 4px rgba(83, 83, 83, 0.297));
+    filter: drop-shadow(2px 2px 4px rgba(83, 83, 83, 0.297));
 }
 
 .weather-detail-item .detail-label {
@@ -549,10 +549,9 @@ p, h3, span {
 }
 
 /* ============================================
-   CARDS DE ALERTAS - ESTILO UNIFICADO
+   CARDS DE ALERTAS
    ============================================ */
 
-/* Cada card de alerta - altura automática independente */
 .dashboard-card.alert-card {
     display: flex;
     flex-direction: column;
@@ -579,7 +578,6 @@ p, h3, span {
     word-break: break-word;
 }
 
-/* Título do alerta (ex: "Baixa Umidade") */
 .alert-title-text {
     font-size: 1.1rem;
     font-weight: 700;
@@ -587,21 +585,19 @@ p, h3, span {
     color: var(--text-primary);
     display: flex;
     align-items: center;
-    justify-content: center; /* ← MUDE de "flex-start" para "center" */
+    justify-content: center;
     flex-wrap: wrap;
     gap: 8px;
-    text-align: center; /* ← MUDE de "left" para "center" */
+    text-align: center;
     line-height: 1.4;
     width: 100%;
     max-width: 100%;
 }
 
-/* Severidade do alerta (ex: "Perigo Potencial") */
 .alert-severity-text {
     display: none !important;
 }
 
-/* Descrição do alerta */
 .alert-desc-text {
     font-size: 0.85rem;
     line-height: 1.5;
@@ -614,7 +610,6 @@ p, h3, span {
     word-break: break-word;
 }
 
-/* Período do alerta */
 .alert-time-text {
     display: inline-flex;
     align-items: center;
@@ -634,7 +629,6 @@ p, h3, span {
     vertical-align: middle;
 }
 
-/* Ícone do alerta */
 .alert-title-text .alert-icon {
     width: 28px;
     height: 28px;
@@ -643,7 +637,6 @@ p, h3, span {
     vertical-align: middle;
 }
 
-/* Container do conteúdo do alerta */
 .alert-content-box {
     display: flex;
     align-items: flex-start;
@@ -660,7 +653,6 @@ p, h3, span {
     max-width: 100%;
 }
 
-/* Botão "outros alertas" - mantém normal */
 .btn-outros-alertas {
     display: inline-flex;
     align-items: center;
@@ -676,7 +668,7 @@ p, h3, span {
     margin-left: 4px;
     font-weight: normal;
     flex-shrink: 0;
-    text-transform: none; /* ← ADICIONE esta linha */
+    text-transform: none;
 }
 
 .btn-outros-alertas:hover {
@@ -1168,7 +1160,6 @@ p, h3, span {
         gap: 20px;
     }
 
-    /* Coluna do Tempo - ocupa 100% */
     .weather-column {
         grid-column: 1 / 2;
         width: 100%;
@@ -1179,7 +1170,6 @@ p, h3, span {
         width: 100%;
     }
 
-    /* Coluna de Alertas - ocupa 100% com 2 colunas */
     .alerts-column {
         grid-column: 1 / 2;
         display: grid;
@@ -1210,7 +1200,6 @@ p, h3, span {
         grid-template-columns: 1fr 1fr;
     }
 
-    /* CARD DO TEMPO - AJUSTE PARA TABLET */
     .weather-grid {
         grid-template-columns: 1fr 1fr;
         gap: 16px;
@@ -1247,22 +1236,24 @@ p, h3, span {
 
 /* ============================================
    RESPONSIVO - MOBILE (768px)
+   Inclui ajustes que antes estavam em 480px
    ============================================ */
 
 @media (max-width: 768px) {
+    /* ---------- CONTAINER E NAVBAR ---------- */
     .container {
-        padding: 12px 16px;
+        padding: 10px 12px;
     }
 
     .navbar {
-        padding: 12px 16px;
-        border-radius: 8px;
+        padding: 10px 12px;
+        border-radius: 6px;
     }
 
     .nav-container {
         flex-direction: column;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
     }
 
     .logo-img {
@@ -1280,40 +1271,55 @@ p, h3, span {
 
     .nav-menu-mobile {
         display: flex;
-        gap: 6px;
+        gap: 4px;
     }
 
     .nav-link,
     .theme-btn {
-        padding: 7px 12px;
-        font-size: 0.85rem;
+        padding: 4px 8px;
+        font-size: 0.75rem;
         border-radius: 4px;
     }
 
     .nav-link .nav-icon,
     .theme-btn .theme-icon-img {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
     }
 
+    /* ---------- CONTEÚDO PRINCIPAL ---------- */
     .main-content {
-        margin: 16px 0;
-        padding: 2px 16px 20px 16px;
-        border-radius: 9px;
+        margin: 12px 0;
+        padding: 2px 16px 30px 16px;
+        border-radius: 8px;
     }
 
     .main-title {
-        font-size: 1.4rem;
+        font-size: 1.1rem;
+    }
+
+    .main-title .hero-divider {
+        display: none;
+    }
+
+    .main-title .hero-city {
+        display: block;
+        margin-top: 2px;
     }
 
     .dashboard-card {
         padding: 14px;
     }
 
+    .dashboard-grid {
+        gap: 12px;
+    }
+
+    /* ---------- COLUNA DE ALERTAS ---------- */
     .alerts-column {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 16px;
         margin-bottom: 4px;
         order: -1;
     }
@@ -1439,180 +1445,94 @@ p, h3, span {
         opacity: 0.8;
     }
 
+    /* ---------- CARD DO TEMPO (LAYOUT REFORMULADO) ---------- */
     .weather-column {
         margin-top: 0;
     }
 
-    .weather-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
+    /* Coluna esquerda: ícone + temp na 1ª linha, condição na 2ª, max/min na 3ª */
     .weather-col-left {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 4px 12px;
-        padding: 0;
-    }
-
-    .weather-col-left .weather-icon-big img {
-        width: 56px;
-        height: 56px;
-    }
-
-    .weather-col-left .weather-condition {
-        font-size: 0.85rem;
-        margin-top: 0;
-        width: 100%;
-        text-align: center;
-        order: 10;
-    }
-
-    .weather-col-left .weather-temp-block {
-        margin-top: 0;
-    }
-
-    .weather-col-left .weather-temp-value {
-        font-size: 2.4rem;
-    }
-
-    .weather-col-left .weather-minmax {
-        gap: 12px;
-        font-size: 0.8rem;
-    }
-
-    .weather-col-right {
-        border-top: 1px solid var(--border);
-        padding-top: 10px;
-        gap: 3px;
-    }
-
-    .weather-detail-item {
-        padding: 4px 10px;
-    }
-
-    .weather-detail-item .detail-icon {
-        width: 16px;
-        height: 16px;
-    }
-
-    .weather-detail-item .detail-label {
-        font-size: 0.7rem;
-        min-width: 55px;
-    }
-
-    .weather-detail-item .detail-value {
-        font-size: 0.8rem;
-    }
-
-    .instagram-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .team-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .links-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .main-title {
-        font-size: 1.6rem;
-    }
-    .main-title .hero-divider {
-        display: none;
-    }
-    .main-title .hero-city {
-        display: block;
-        margin-top: 2px;
-    }
-
-    .mobile-break {
-        display: block;
-    }
-
-    .rodape {
-        display: block;
-        padding: 16px 14px;
-        font-size: 11px;
-        line-height: 1.8;
-        text-align: center;
-    }
-}
-
-/* ============================================
-   RESPONSIVO - MOBILE PEQUENO (480px)
-   ============================================ */
-
-@media (max-width: 480px) {
-    .container {
-        padding: 10px 12px;
-    }
-
-    .navbar {
-        padding: 10px 12px;
-        border-radius: 6px;
-    }
-
-    .nav-container {
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-template-areas:
+            "icon temp"
+            "condition condition"
+            "minmax minmax";
         align-items: center;
-        gap: 6px;
+        justify-items: center;
+        justify-content: center;
+        column-gap: 12px;
+        row-gap: 4px;
+        padding: 0;
+        width: 100%;
     }
 
-    .logo-img {
-        width: 50px;
-        height: 50px;
-    }
-
-    .logo-text {
-        font-size: 1.2rem;
-    }
-
-    .nav-link,
-    .theme-btn {
-        padding: 4px 8px;
-        font-size: 0.75rem;
-    }
-
-    .nav-link .nav-icon,
-    .theme-btn .theme-icon-img {
-        width: 14px;
-        height: 14px;
-    }
-
-    .main-content {
-        margin: 12px 0;
-        padding: 2px 16px 30px 16px;
-        border-radius: 8px;
-    }
-
-    .main-title {
-        font-size: 1.1rem;
-    }
-
-    .dashboard-grid {
-        gap: 12px;
+    .weather-col-left .weather-icon-big {
+        grid-area: icon;
+        justify-self: end;
+        display: flex;
+        align-items: center;
     }
 
     .weather-col-left .weather-icon-big img {
         width: 48px;
         height: 48px;
+        display: block;
+    }
+
+    .weather-col-left .weather-temp-block {
+        grid-area: temp;
+        justify-self: start;
+        display: flex;
+        align-items: baseline;
+        gap: 2px;
+        margin: 0;
     }
 
     .weather-col-left .weather-temp-value {
-        font-size: 2rem;
+        font-size: 2.4rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .weather-col-left .weather-temp-unit {
+        font-size: 0.8rem;
+    }
+
+    .weather-col-left .weather-condition {
+        grid-area: condition;
+        justify-self: center;
+        width: 100%;
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+        margin: 0;
     }
 
     .weather-col-left .weather-minmax {
-        font-size: 0.75rem;
-        gap: 10px;
+        grid-area: minmax;
+        justify-self: center;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        font-size: 0.8rem;
+        margin: 0;
+    }
+
+    /* Coluna direita continua ao lado (até 468px) */
+    .weather-col-right {
+        padding: 4px 0;
+        gap: 3px;
     }
 
     .weather-detail-item {
         padding: 3px 8px;
+    }
+
+    .weather-detail-item .detail-icon {
+        width: 16px;
+        height: 16px;
     }
 
     .weather-detail-item .detail-label {
@@ -1624,6 +1544,7 @@ p, h3, span {
         font-size: 0.75rem;
     }
 
+    /* ---------- GRIDS ---------- */
     .instagram-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 6px;
@@ -1644,19 +1565,69 @@ p, h3, span {
         font-size: 1.2rem;
     }
 
-    .map-wrapper {
-        height: 180px;
+    .links-grid {
+        grid-template-columns: 1fr;
     }
 
-    .main-title {
-        font-size: 1.3rem;
-    }
-    .main-title .hero-divider {
-        display: none;
-    }
-    .main-title .hero-city {
+    /* ---------- RODAPÉ ---------- */
+    .mobile-break {
         display: block;
-        margin-top: 2px;
+    }
+
+    .rodape {
+        display: block;
+        padding: 16px 14px;
+        font-size: 11px;
+        line-height: 1.8;
+        text-align: center;
+    }
+
+    /* ---------- BOTÃO OUTROS ALERTAS ---------- */
+    .btn-outros-alertas {
+        font-size: 0.55rem !important;
+        padding: 1px 8px !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0 !important;
+        min-width: auto !important;
+    }
+
+    .btn-outros-alertas .texto-alerta {
+        display: none !important;
+    }
+
+    .btn-outros-alertas .texto-futuro {
+        display: none !important;
+    }
+
+    .btn-outros-alertas .numero {
+        display: inline !important;
+    }
+
+    .btn-outros-alertas .numero::before {
+        content: "+";
+        display: inline;
+    }
+}
+
+/* ============================================
+   RESPONSIVO - MOBILE ESTREITO (468px)
+   Empilha a coluna de detalhes abaixo do card do tempo
+   ============================================ */
+
+@media (max-width: 468px) {
+    .weather-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px;
+    }
+
+    .weather-col-right {
+        border-top: 1px solid var(--border);
+        padding-top: 10px;
+        gap: 3px;
     }
 }
 
@@ -1940,53 +1911,4 @@ p, h3, span {
     background: rgba(255, 255, 255, 0.15);
     opacity: 1;
     transform: scale(1.02);
-}
-
-/* ============================================
-   AJUSTES PARA BOTÃO DE ALERTAS EM MOBILE
-   ============================================ */
-
-/* Esconde "alerta(s)" e "futuro" em mobile, mantém apenas o número */
-@media (max-width: 768px) {
-    .btn-outros-alertas {
-        font-size: 0.55rem !important;
-        padding: 1px 8px !important;
-        border-radius: 8px !important;
-        white-space: nowrap !important;
-        flex-shrink: 0 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 0 !important;
-        min-width: auto !important;
-    }
-
-    /* Esconde o texto "alerta" e "alerta(s)" */
-    .btn-outros-alertas .texto-alerta {
-        display: none !important;
-    }
-
-    /* Esconde a palavra "futuro" */
-    .btn-outros-alertas .texto-futuro {
-        display: none !important;
-    }
-
-    /* Mantém apenas o número com um ícone ou "+" */
-    .btn-outros-alertas .numero {
-        display: inline !important;
-    }
-
-    /* Adiciona um "+" antes do número via CSS */
-    .btn-outros-alertas .numero::before {
-        content: "+";
-        display: inline;
-    }
-}
-
-/* Para telas muito pequenas (480px) */
-@media (max-width: 480px) {
-    .btn-outros-alertas {
-        font-size: 0.45rem !important;
-        padding: 0px 6px !important;
-        border-radius: 6px !important;
-    }
 }
