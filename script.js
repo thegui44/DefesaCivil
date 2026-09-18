@@ -508,57 +508,54 @@ let moonPhaseCache = {
 };
 
 /**
- * MAPEAMENTO DAS FASES DA LUA
+ * MAPEAMENTO DAS FASES DA LUA (8 fases)
  * Chave: nome que vem da API (inglês)
- * Valor: nome exibido no card (português)
+ * Valor: { label: nome em português, icon: arquivo SVG }
  */
 const MOON_PHASES_MAP = {
-    'New Moon': 'Nova',
-    'Waxing Crescent': 'Crescente',
-    'First Quarter': 'Crescente',
-    'Waxing Gibbous': 'Crescente',
-    'Full Moon': 'Cheia',
-    'Waning Gibbous': 'Minguante',
-    'Last Quarter': 'Minguante',
-    'Waning Crescent': 'Minguante'
+    'New Moon':        { label: 'Nova',                 icon: 'luanova.svg' },
+    'Waxing Crescent': { label: 'Crescente',            icon: 'luacresc1.svg' },
+    'First Quarter':   { label: 'Crescente',            icon: 'luacresc2.svg' },
+    'Waxing Gibbous':  { label: 'Crescente',            icon: 'luacresc3.svg' },
+    'Full Moon':       { label: 'Cheia',                icon: 'luacheia.svg' },
+    'Waning Gibbous':  { label: 'Minguante',            icon: 'luaming1.svg' },
+    'Last Quarter':    { label: 'Minguante',            icon: 'luaming2.svg' },
+    'Waning Crescent': { label: 'Minguante',            icon: 'luaming3.svg' }
 };
 
 /**
- * MAPEAMENTO DAS FASES PARA ÍCONES
- * Chave: nome em português
- * Valor: nome do arquivo SVG
+ * Retorna as informações completas da fase da lua (label + ícone)
+ * @param {string} faseIngles - Nome da fase em inglês vindo da API
+ * @returns {{label: string, icon: string}}
  */
-const MOON_ICONS_MAP = {
-    'Nova': 'luanova.svg',
-    'Crescente': 'luacresc.svg',
-    'Cheia': 'luacheia.svg',
-    'Minguante': 'luaming.svg'
-};
-
-/**
- * Retorna o ícone correspondente à fase da lua
- */
-function getMoonIcon(faseLabel) {
-    if (!faseLabel || faseLabel === '--') {
-        return 'luanova.svg';
+function getMoonPhaseInfo(faseIngles) {
+    if (!faseIngles || faseIngles === '--') {
+        return { label: '--', icon: 'luanova.svg' };
     }
-    return MOON_ICONS_MAP[faseLabel] || 'luanova.svg';
-}
-
-/**
- * Traduz a fase da lua do inglês para o português
- */
-function traduzirFaseLua(faseIngles) {
-    if (!faseIngles || faseIngles === '--') return '--';
-    if (MOON_PHASES_MAP[faseIngles]) return MOON_PHASES_MAP[faseIngles];
     
+    // Busca exata
+    if (MOON_PHASES_MAP[faseIngles]) {
+        return MOON_PHASES_MAP[faseIngles];
+    }
+    
+    // Busca aproximada (case-insensitive)
     const faseLower = faseIngles.toLowerCase();
     for (const [key, value] of Object.entries(MOON_PHASES_MAP)) {
         if (key.toLowerCase().includes(faseLower) || faseLower.includes(key.toLowerCase())) {
             return value;
         }
     }
-    return faseIngles;
+    
+    // Fallback: retorna o nome original com ícone padrão
+    return { label: faseIngles, icon: 'luanova.svg' };
+}
+
+/**
+ * Traduz a fase da lua do inglês para o português
+ * (mantida para compatibilidade com código legado)
+ */
+function traduzirFaseLua(faseIngles) {
+    return getMoonPhaseInfo(faseIngles).label;
 }
 
 async function fetchMoonPhase() {
@@ -615,17 +612,16 @@ async function atualizarFaseLua() {
     const moonData = await fetchMoonPhase();
     
     if (moonData && moonData.phase !== '--') {
-        // Traduz a fase
-        const faseLabel = traduzirFaseLua(moonData.phase);
+        // Obtém informações completas da fase (label + ícone específico)
+        const phaseInfo = getMoonPhaseInfo(moonData.phase);
+        const faseLabel = phaseInfo.label;
+        const iconFile = phaseInfo.icon;
         
-        // Define o ícone baseado na fase traduzida
-        const iconFile = getMoonIcon(faseLabel);
-        
-        // Atualiza o ícone
+        // Atualiza o ícone específico da fase
         moonImg.src = `@image/icones/${iconFile}`;
         moonImg.alt = faseLabel;
         
-        // Atualiza o texto: "Crescente (45%)"
+        // Atualiza o texto: "Crescente Gibosa (45%)"
         let texto = faseLabel;
         if (moonData.illumination && moonData.illumination !== '--') {
             texto += ` (${moonData.illumination}%)`;
